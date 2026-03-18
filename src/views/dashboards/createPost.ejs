@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viết bài mới - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .form-container { max-width: 800px; margin-top: 50px; }
+        .card-custom { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .form-label { font-weight: 600; color: #495057; }
+        .btn-post { border-radius: 10px; padding: 12px 25px; font-weight: bold; transition: all 0.3s; }
+        .btn-post:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+<div class="container form-container mb-5">
+    <div class="card card-custom">
+
+        <div class="card-header bg-success text-white py-3 rounded-top-4 border-0">
+            <h4 class="mb-0 text-center"><i class="bi bi-pencil-square"></i> SÁNG TẠO NỘI DUNG MỚI</h4>
+        </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger mx-4 mt-3 shadow-sm border-start border-4 border-danger">
+                <i class="bi bi-exclamation-octagon-fill me-2"></i> <%= error %>
+            </div>
+        <% } %>
+
+        <div class="card-body p-4 p-md-5">
+            <form action="/admin/posts/create" method="POST" enctype="multipart/form-data">
+
+                <div class="mb-4">
+                    <label class="form-label">Tiêu đề bài viết</label>
+                    <input type="text" name="title" class="form-control form-control-lg"
+                           placeholder="Nhập tiêu đề hấp dẫn..." required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">Danh mục</label>
+                        <select name="category_id" class="form-select">
+                            <% if (categories && categories.length > 0) { %>
+                                <% categories.forEach(cat => { %>
+                                    <option value="<%= cat.id %>"><%= cat.name %></option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">Ảnh đại diện bài viết</label>
+                        <input type="file" name="image" class="form-control" id="imageInput" accept="image/*" required>
+                        <div class="mt-2 text-center">
+                            <img id="preview" src="#" alt="Xem trước ảnh" class="img-thumbnail d-none" style="max-height: 150px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Nội dung</label>
+                    <textarea name="content" class="form-control" rows="10"
+                              placeholder="Viết nội dung vào đây..." required></textarea>
+                </div>
+
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-success btn-post flex-grow-1">
+                        <i class="bi bi-send-fill me-2"></i> XUẤT BẢN BÀI VIẾT
+                    </button>
+                    <a href="/admin/posts" class="btn btn-outline-secondary btn-post">Quay lại</a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const imageInput = document.getElementById('imageInput');
+    const preview = document.getElementById('preview');
+
+    imageInput.onchange = evt => {
+        const [file] = imageInput.files;
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('d-none');
+        }
+    }
+</script>
+</body>
+</html>

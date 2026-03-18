@@ -13,7 +13,7 @@ app.set("views", path.join(__dirname, "src/views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // --- 3. NẠP ROUTE VÀO APP (Sau khi đã có Middlewares) ---
 app.use("/", authRoutes);
@@ -21,7 +21,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/admin/users", userRoutes);
 app.use("/admin/posts", postRoutes);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`🚀 Server đang chạy tại: http://localhost:${PORT}`);
 });

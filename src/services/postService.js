@@ -1,11 +1,13 @@
-const { Post, User, Category } = require("../models");
+const { Post, User, Category, PostAnalytics } = require("../models/index");
 class PostService {
   async getAll() {
     return await Post.findAll({
       include: [
         { model: User, as: "author", attributes: ["name"] },
         { model: Category, as: "category", attributes: ["name"] },
+        { model: PostAnalytics, as: "stats" },
       ],
+      order: [["createdAt", "DESC"]],
     });
   }
   async create(data) {

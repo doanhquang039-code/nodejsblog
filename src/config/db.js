@@ -12,9 +12,6 @@ const sequelize = new Sequelize(
     logging: false, // Tắt log SQL cho đỡ rối terminal
   },
 );
-
-// KIỂM TRA DÒNG NÀY: Phải export cái biến sequelize viết thường
-module.exports = sequelize;
 // Kiểm tra kết nối
 const checkConnection = async () => {
   try {

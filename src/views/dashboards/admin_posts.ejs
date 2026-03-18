@@ -6,68 +6,144 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        .table-container { border-radius: 15px; overflow: hidden; }
-        .status-badge { min-width: 100px; }
+        .table-container { border-radius: 15px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .status-badge { min-width: 90px; font-size: 0.75rem; }
+        .stats-icon { font-size: 0.85rem; color: #6c757d; }
+        .post-title { color: #2c3e50; text-decoration: none; transition: 0.2s; display: block; }
+        .post-title:hover { color: #198754; }
+        /* Style cho ảnh bài viết */
+        .post-img-thumb {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            background-color: #eee;
+            border: 1px solid #ddd;
+        }
+        .post-img-empty {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border-radius: 8px;
+            color: #ccc;
+            border: 1px dashed #ccc;
+        }
     </style>
 </head>
 <body class="bg-light py-5">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white shadow-sm rounded-4 border-start border-success border-5">
+        <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white rounded-4 border-start border-success border-5 shadow-sm">
             <div>
                 <h2 class="fw-bold text-success mb-1"><i class="bi bi-journal-check"></i> QUẢN LÝ BÀI VIẾT</h2>
-                <p class="text-muted mb-0">Chào sếp <strong><%= user.name %></strong>. Có <%= posts.length %> bài viết trên hệ thống.</p>
+                <p class="text-muted mb-0">Chào sếp <strong><%= user.name %></strong>. Hệ thống có <span class="badge bg-success"><%= posts.length %></span> bài viết.</p>
             </div>
             <div class="d-flex gap-2">
-                <a href="/admin/posts/create" class="btn btn-success rounded-pill px-4 fw-bold">Viết bài mới</a>
-                <a href="/admin/users" class="btn btn-outline-primary rounded-pill px-4 text-decoration-none">Quản lý User</a>
+                <a href="/admin/posts/create" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+                    <i class="bi bi-plus-lg"></i> Viết bài mới
+                </a>
+                <a href="/admin/users" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-people"></i> Quản lý User
+                </a>
             </div>
         </div>
 
-        <div class="card border-0 shadow-sm table-container">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th class="ps-4">Tiêu đề</th>
-                        <th>Tác giả</th>
-                        <th>Danh mục</th>
-                        <th>Trạng thái</th>
-                        <th class="text-end pe-4">Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% posts.forEach(p => { %>
+        <div class="card border-0 table-container">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <td class="ps-4 fw-bold"><%= p.title %></td>
-                            <td><%= p.author ? p.author.name : 'Ẩn danh' %></td>
-                            <td><span class="badge bg-light text-dark border"><%= p.category ? p.category.name : 'Chưa phân loại' %></span></td>
-                            <td>
-                                <% if(p.status === 'pending') { %>
-                                    <span class="badge bg-warning text-dark status-badge">Chờ duyệt</span>
-                                <% } else if(p.status === 'approved') { %>
-                                    <span class="badge bg-success status-badge">Đã duyệt</span>
-                                <% } else { %>
-                                    <span class="badge bg-danger status-badge">Bị từ chối</span>
-                                <% } %>
-                            </td>
-                            <td class="text-end pe-4">
-                                <div class="btn-group">
-                                    <% if (p.status === 'pending' && (user.role === 'admin' || user.role === 'manager')) { %>
-                                        <form action="/admin/posts/approve/<%= p.id %>" method="POST" class="d-inline">
-                                            <input type="hidden" name="action" value="approved">
-                                            <button type="submit" class="btn btn-sm btn-success">Duyệt</button>
-                                        </form>
-                                    <% } %>
-                                    <form action="/admin/posts/delete/<%= p.id %>" method="POST" class="d-inline">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger ms-1" onclick="return confirm('Xóa bài này không sếp?')">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+                            <th class="ps-4" style="width: 80px">Ảnh</th>
+                            <th style="width: 30%">Nội dung bài viết</th>
+                            <th style="width: 15%">Thông tin gốc</th>
+                            <th style="width: 15%">Thống kê</th>
+                            <th style="width: 15%">Trạng thái</th>
+                            <th style="width: 15%">Ngày tạo</th>
+                            <th class="text-end pe-4" style="width: 10%">Thao tác</th>
                         </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% posts.forEach(p => { %>
+                            <tr>
+                                <td class="ps-4">
+                                    <% if(p.image) { %>
+                                        <img src="<%= p.image %>" class="post-img-thumb" alt="Thumbnail">
+                                    <% } else { %>
+                                        <div class="post-img-empty">
+                                            <i class="bi bi-image" style="font-size: 1.5rem;"></i>
+                                        </div>
+                                    <% } %>
+                                </td>
+
+                                <td>
+                                    <div class="fw-bold post-title"><%= p.title %></div>
+                                    <div class="text-muted small" style="font-family: monospace; font-size: 0.75rem;">
+                                        /<%= p.slug || 'chua-co-slug' %>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="small"><i class="bi bi-person-circle me-1"></i><%= p.author ? p.author.name : 'Ẩn danh' %></div>
+                                    <span class="badge bg-info-subtle text-info border border-info-subtle mt-1">
+                                        <%= p.category ? p.category.name : 'Chưa phân loại' %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="stats-icon"><i class="bi bi-eye-fill me-1"></i> <%= p.stats ? p.stats.view_count : 0 %> views</div>
+                                    <div class="stats-icon"><i class="bi bi-heart-fill text-danger me-1"></i> <%= p.stats ? p.stats.like_count : 0 %> likes</div>
+                                </td>
+
+                                <td>
+                                    <% if(p.status === 'pending') { %>
+                                        <span class="badge rounded-pill bg-warning text-dark status-badge border border-warning">Chờ duyệt</span>
+                                    <% } else if(p.status === 'approved' || p.status === 'published') { %>
+                                        <span class="badge rounded-pill bg-success status-badge border border-success">Đã duyệt</span>
+                                    <% } else { %>
+                                        <span class="badge rounded-pill bg-danger status-badge border border-danger">Từ chối</span>
+                                    <% } %>
+                                </td>
+
+                                <td>
+                                    <div class="small text-muted">
+                                        <%= p.createdAt ? new Date(p.createdAt).toLocaleDateString('vi-VN') : 'N/A' %>
+                                    </div>
+                                </td>
+
+                                <td class="text-end pe-4">
+                                    <div class="btn-group shadow-sm">
+                                        <% if (p.status === 'pending' && (user.role === 'admin' || user.role === 'manager')) { %>
+                                            <form action="/admin/posts/approve/<%= p.id %>" method="POST" class="d-inline">
+                                                <input type="hidden" name="action" value="approved">
+                                                <button type="submit" class="btn btn-sm btn-success" title="Duyệt bài">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </button>
+                                            </form>
+                                        <% } %>
+                                        <a href="/admin/posts/edit/<%= p.id %>" class="btn btn-sm btn-outline-primary" title="Sửa bài">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form action="/admin/posts/delete/<%= p.id %>" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Xóa vĩnh viễn bài này nghe sếp?')" title="Xóa bài">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            
+            <% if (posts.length === 0) { %>
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox text-muted display-1"></i>
+                    <p class="text-muted mt-3">Chưa có bài viết nào để hiển thị sếp ơi!</p>
+                </div>
+            <% } %>
         </div>
     </div>
 </body>

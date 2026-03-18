@@ -27,8 +27,8 @@
                     <i class="bi bi-person-plus-fill"></i> Thêm User mới
                 </a>
                 <a href="/admin/posts" class="btn btn-primary rounded-pill px-4 shadow-sm">
-        <i class="bi bi-journal-text"></i> Bài viết
-    </a>
+                    <i class="bi bi-journal-text"></i> Bài viết
+                </a>
                 <a href="/admin" class="btn btn-outline-primary rounded-pill px-4">
                     <i class="bi bi-tags"></i> Danh mục
                 </a>
@@ -87,8 +87,8 @@
                                             </span>
                                         </td>
                                         <td class="text-end pe-4">
-                                            <% if (u.id !== user.id) { %>
-                                                <div class=" shadow-sm">
+                                            <% if (u.role !== 'admin') { %>
+                                                <div class="shadow-sm d-inline-flex">
                                                     <a href="/admin/users/edit/<%= u.id %>" class="btn btn-sm btn-outline-primary btn-action" title="Sửa thông tin">
                                                         <i class="bi bi-pencil-square"></i> Sửa
                                                     </a>
@@ -101,7 +101,7 @@
                                                 </div>
                                             <% } else { %>
                                                 <span class="badge bg-light text-secondary border px-3 py-2 shadow-sm small">
-                                                    <i class="bi bi-person-bounding-box me-1"></i> Đang là sếp
+                                                    <i class="bi bi-person-badge-fill me-1"></i> Đang là sếp
                                                 </span>
                                             <% } %>
                                         </td>

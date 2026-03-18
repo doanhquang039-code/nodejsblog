@@ -1,67 +1,82 @@
-// src/controllers/postController.js
 const postService = require("../services/postService");
 const categoryService = require("../services/categoryService");
+const slugify = require("slugify");
 
 exports.getAll = async (req, res) => {
-    try {
-        let posts;
-        if (req.user.role === "admin" || req.user.role === "manager") {
-            posts = await postService.getAll();
-        } else {
-            // Đảm bảo sếp đã viết hàm getPostsByUser trong Service nhé!
-            posts = await postService.getPostsByUser(req.user.id);
-        }
-        res.render("dashboards/admin_posts", { posts, user: req.user });
-    } catch (error) {
-        res.status(500).send("Lỗi: " + error.message);
+  try {
+    let posts;
+    if (
+      req.user.role === "admin" ||
+      req.user.role === "manager" ||
+      req.user.role === "editor" ||
+      req.user.role === "user"
+    ) {
+      posts = await postService.getAll();
+    } else {
+      posts = await postService.getPostsByUser(req.user.id);
     }
+    res.render("dashboards/admin_posts", { posts, user: req.user });
+  } catch (error) {
+    res.status(500).send("Lỗi: " + error.message);
+  }
 };
 
 exports.getCreateForm = async (req, res) => {
-    try {
-        const categories = await categoryService.getAll();
-        res.render("dashboards/createPost", { categories, user: req.user });
-    } catch (error) {
-        res.status(500).send("Lỗi lấy danh mục: " + error.message);
-    }
+  try {
+    const categories = await categoryService.getAll();
+    res.render("dashboards/createPost", { categories, user: req.user });
+  } catch (error) {
+    res.status(500).send("Lỗi Server: " + error.message);
+  }
 };
-
 exports.create = async (req, res) => {
-    try {
-        const postData = {
-            ...req.body,
-            user_id: req.user.id, // Đã khớp với Model
-            status: "pending",
-        };
-        await postService.create(postData);
-        res.redirect("/admin/posts");
-    } catch (error) {
-        // LỖI Ở ĐÂY NÈ SẾP: Nếu lỗi, mình cần lấy lại categories để render lại form
-        const categories = await categoryService.getAll();
-        res.render("dashboards/createPost", { 
-            categories, 
-            user: req.user, 
-            error: "Lỗi tạo bài: " + error.message 
-        });
-    }
-};
+  try {
+    const imagePath = req.file ? `/uploads/posts/${req.file.filename}` : "";
 
+    console.log("--> req.file:", req.file);
+
+    const postData = {
+      title: req.body.title,
+      content: req.body.content,
+      slug:
+        slugify(String(req.body.title), { lower: true, strict: true }) +
+        "-" +
+        Date.now(),
+      image: imagePath, // ← lấy từ req.file, không phải req.body
+      categoryId: req.body.category_id,
+      userId: req.user.id,
+      status: "pending",
+    };
+
+    console.log("POST DATA:", postData);
+    await postService.create(postData);
+    res.redirect("/admin/posts");
+  } catch (error) {
+    console.error("LOI TAO BAI:", error.message);
+    const categories = await categoryService.getAll();
+    res.render("dashboards/createPost", {
+      categories,
+      user: req.user,
+      error: "Loi tao bai: " + error.message,
+    });
+  }
+};
 exports.approvePost = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { action } = req.body;
-        await postService.updateStatus(id, action);
-        res.redirect("/admin/posts");
-    } catch (error) {
-        res.status(400).send("Lỗi khi duyệt bài: " + error.message);
-    }
+  try {
+    const { id } = req.params;
+    const { action } = req.body;
+    await postService.updateStatus(id, action);
+    res.redirect("/admin/posts");
+  } catch (error) {
+    res.status(400).send("Lỗi khi duyệt bài: " + error.message);
+  }
 };
 
 exports.delete = async (req, res) => {
-    try {
-        await postService.delete(req.params.id);
-        res.redirect("/admin/posts");
-    } catch (error) {
-        res.status(400).send("Lỗi xóa bài: " + error.message);
-    }
+  try {
+    await postService.delete(req.params.id);
+    res.redirect("/admin/posts");
+  } catch (error) {
+    res.status(400).send("Lỗi xóa bài: " + error.message);
+  }
 };
