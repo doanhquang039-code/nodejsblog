@@ -24,6 +24,11 @@ const Post = sequelize.define(
       type: DataTypes.ENUM("pending", "approved", "rejected"),
       defaultValue: "pending",
     },
+    video: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: "video",
+    },
   },
   {
     tableName: "posts",

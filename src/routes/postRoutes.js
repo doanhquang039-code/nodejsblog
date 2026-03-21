@@ -5,7 +5,12 @@ const upload = require("../middlewares/uploadMiddleware");
 const postController = require("../controllers/postController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
-router.get("/", authMiddleware, postController.getAll); // Cho phép xem danh sách bài của chính mình hoặc tất cả
+router.post(
+  "/approve/:id",
+  authMiddleware,
+  roleMiddleware(["admin"]),
+  postController.approvePost,
+);
 router.get("/create", authMiddleware, postController.getCreateForm);
 router.get(
   "/",
@@ -26,7 +31,6 @@ router.post(
         console.error("❌ MULTER ERROR:", err.code, err.message);
         return res.status(400).send("Multer lỗi: " + err.code);
       } else if (err && err.message !== "Unexpected end of form") {
-        // Bỏ qua lỗi "Unexpected end of form" vì file đã upload OK
         console.error("❌ OTHER ERROR:", err.message);
         return res.status(400).send("Lỗi khác: " + err.message);
       }
@@ -42,5 +46,4 @@ router.post(
   roleMiddleware(["admin"]),
   postController.delete,
 );
-
 module.exports = router;

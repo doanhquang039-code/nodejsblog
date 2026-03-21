@@ -52,9 +52,9 @@
     </div>
 
     <div class="col-md-6 mb-4">
-        <label class="form-label">Ảnh đại diện bài viết</label>
-        <input type="file" name="image" class="form-control" id="imageInput" accept="image/*" required>
-    </div>
+    <label class="form-label">Ảnh hoặc Video bài viết</label>
+    <input type="file" name="image" class="form-control" id="imageInput" accept="image/*,video/*" required>
+</div>
 </div>
 
 <div class="mb-4">
@@ -96,10 +96,15 @@
     const preview = document.getElementById('preview');
 
     imageInput.onchange = evt => {
-        const [file] = imageInput.files;
+        const file = imageInput.files[0];
         if (file) {
-            preview.src = URL.createObjectURL(file);
-            preview.classList.remove('d-none');
+            if (file.type.startsWith('image/')) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove('d-none');
+            } else if (file.type.startsWith('video/')) {
+                preview.src = "https://cdn-icons-png.flaticon.com/512/1179/1179069.png"; 
+                preview.classList.remove('d-none');
+            }
         }
     }
 </script>
