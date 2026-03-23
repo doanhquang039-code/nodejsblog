@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
-
 const Comment = sequelize.define(
   "Comment",
   {
@@ -21,10 +20,21 @@ const Comment = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      field: "created_at",
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      field: "updated_at",
+    },
   },
   {
     tableName: "comments",
-    timestamps: false,
+    timestamps: true,
+    underscored: true, // ← thêm dòng này
+    createdAt: "created_at",
+    updatedAt: "updated_at",
   },
 );
 

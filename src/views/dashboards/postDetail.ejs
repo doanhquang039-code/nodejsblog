@@ -16,8 +16,9 @@
         .info-label { font-size: 0.8rem; text-transform: uppercase; color: #6c757d; font-weight: bold; letter-spacing: 1px; }
         .info-value { font-weight: 600; color: #198754; }
         .slug-box { background: #e9ecef; padding: 10px 15px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; }
-        .comment-box { background: #f8f9fa; border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #198754; position: relative; }
-        .comment-actions { position: absolute; top: 10px; right: 10px; }
+        .comment-box { background: #f8f9fa; border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #198754; }
+        .comment-timestamp { font-size: 0.78rem; color: #adb5bd; }
+        .comment-timestamp.edited { color: #6c757d; font-style: italic; }
     </style>
 </head>
 <body class="py-5">
@@ -29,7 +30,10 @@
         </div>
 
         <div class="row g-4">
+            <%# ===================== CỘT TRÁI: NỘI DUNG BÀI + BÌNH LUẬN ===================== %>
             <div class="col-lg-8">
+
+                <%# THÔNG TIN BÀI VIẾT %>
                 <div class="card detail-card p-4 mb-4">
                     <div class="post-header">
                         <div class="d-flex justify-content-between align-items-start mb-3">
@@ -66,15 +70,17 @@
                                 <span class="badge bg-success me-1">#<%= t.name %></span>
                             <% }) %>
                         <% } else { %>
-                            <span class="text-muted small italic">Chưa gắn thẻ tags</span>
+                            <span class="text-muted small fst-italic">Chưa gắn thẻ tags</span>
                         <% } %>
                     </div>
                 </div>
 
+                <%# PHẦN BÌNH LUẬN %>
                 <% if (post.status === 'approved') { %>
                     <div class="card detail-card p-4">
                         <h4 class="fw-bold mb-4"><i class="bi bi-chat-left-text me-2"></i>Thảo luận</h4>
-                        
+
+                        <%# FORM THÊM BÌNH LUẬN %>
                         <form action="/comments/add" method="POST" class="mb-5">
                             <input type="hidden" name="postId" value="<%= post.id %>">
                             <div class="mb-3">
@@ -83,17 +89,33 @@
                             <button type="submit" class="btn btn-success rounded-pill px-4">Gửi bình luận</button>
                         </form>
 
+                        <%# DANH SÁCH BÌNH LUẬN %>
                         <div class="comment-list">
                             <% if (post.comments && post.comments.length > 0) { %>
                                 <% post.comments.forEach(cmt => { %>
                                     <div class="comment-box shadow-sm" id="cmt-container-<%= cmt.id %>">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="fw-bold text-success">
-                                                <i class="bi bi-person-circle me-1"></i>
-                                                <%= cmt.author ? cmt.author.name : 'Ẩn danh' %>
-                                            </span>
-                                            
-                                            <div class="comment-actions d-flex gap-2">
+
+                                        <%# HEADER COMMENT: Tên + Timestamp + Nút hành động %>
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <span class="fw-bold text-success">
+                                                    <i class="bi bi-person-circle me-1"></i>
+                                                    <%= cmt.author ? cmt.author.name : 'Ẩn danh' %>
+                                                </span>
+                                                <br>
+                                                <% if (cmt.updatedAt) { %>
+                                                    <small class="comment-timestamp edited">
+                                                        <i class="bi bi-pencil me-1"></i>Đã sửa: <%= new Date(cmt.updatedAt).toLocaleString('vi-VN') %>
+                                                    </small>
+                                                <% } else if (cmt.createdAt) { %>
+                                                    <small class="comment-timestamp">
+                                                        <i class="bi bi-clock me-1"></i><%= new Date(cmt.createdAt).toLocaleString('vi-VN') %>
+                                                    </small>
+                                                <% } %>
+                                            </div>
+
+                                            <%# NÚT SỬA / XÓA %>
+                                            <div class="d-flex gap-2">
                                                 <button class="btn btn-sm text-primary p-0" onclick="toggleEdit('<%= cmt.id %>')">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </button>
@@ -107,8 +129,10 @@
                                             </div>
                                         </div>
 
+                                        <%# NỘI DUNG COMMENT %>
                                         <p id="content-text-<%= cmt.id %>" class="mb-0 text-dark"><%= cmt.content %></p>
 
+                                        <%# FORM SỬA COMMENT %>
                                         <form id="edit-form-<%= cmt.id %>" action="/comments/update/<%= cmt.id %>" method="POST" class="mt-2 d-none">
                                             <div class="input-group">
                                                 <input type="text" name="content" class="form-control" value="<%= cmt.content %>" required>
@@ -116,10 +140,11 @@
                                                 <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEdit('<%= cmt.id %>')">Hủy</button>
                                             </div>
                                         </form>
+
                                     </div>
                                 <% }) %>
                             <% } else { %>
-                                <p class="text-muted text-center py-4 italic">Chưa có bình luận nào. Sếp mở bát đi!</p>
+                                <p class="text-muted text-center py-4 fst-italic">Chưa có bình luận nào. Sếp mở bát đi!</p>
                             <% } %>
                         </div>
                     </div>
@@ -128,12 +153,14 @@
                         <i class="bi bi-info-circle me-2"></i> Bài viết đang chờ duyệt. Chế độ bình luận đang tạm khóa.
                     </div>
                 <% } %>
+
             </div>
 
+            <%# ===================== CỘT PHẢI: THÔNG SỐ HỆ THỐNG ===================== %>
             <div class="col-lg-4">
                 <div class="card detail-card p-4 sticky-top" style="top: 20px;">
                     <h5 class="fw-bold mb-4 border-bottom pb-2">Thông số hệ thống</h5>
-                    
+
                     <div class="mb-4">
                         <p class="info-label mb-1">Tác giả</p>
                         <p class="info-value mb-0">
@@ -185,6 +212,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 

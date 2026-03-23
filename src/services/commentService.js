@@ -1,24 +1,46 @@
-const { Comment, User } = require("../models");
+const { Comment, User } = require("../models/index");
+
 class CommentService {
   async create(data) {
-    return await Comment.create(data);
-  }
-  async getByPost(postId) {
-    return await Comment.findAll({
-      where: { postId: postId }, // Dùng postId cho khớp Model
-      include: [{ model: User, as: "author", attributes: ["name"] }],
-      order: [["id", "DESC"]], // Thêm dòng này nè sếp
-    });
+    try {
+      return await Comment.create(data);
+    } catch (error) {
+      console.error("Lỗi Service Create Comment:", error.message);
+      throw error;
+    }
   }
   async delete(id) {
-    return await Comment.destroy({
-      where: { id: id },
-    });
+    try {
+      return await Comment.destroy({
+        where: { id: id },
+      });
+    } catch (error) {
+      console.error("Lỗi Service Delete Comment:", error.message);
+      throw error;
+    }
   }
-  async update(id, data) {
-    return await Comment.update(data, {
-      where: { id: id },
-    });
+  async getByPostId(postId) {
+    try {
+      return await Comment.findAll({
+        where: { postId: postId },
+        include: [{ model: User, as: "author", attributes: ["name"] }],
+        order: [["id", "DESC"]],
+      });
+    } catch (error) {
+      console.error("Lỗi Service Get Comments:", error.message);
+      throw error;
+    }
+  }
+  async update(id, content) {
+    try {
+      const comment = await Comment.findByPk(id);
+      if (!comment) throw new Error("Không tìm thấy bình luận!");
+      return await comment.update({ content });
+    } catch (error) {
+      console.error("Lỗi Service Update Comment:", error.message);
+      throw error;
+    }
   }
 }
+
 module.exports = new CommentService();
