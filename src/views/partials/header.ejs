@@ -1,0 +1,35 @@
+<!-- Header Partial -->
+<header style="background: var(--bg-primary); border-bottom: 1px solid var(--border-color); padding: 1rem 0; box-shadow: var(--shadow);">
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <!-- Logo -->
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="/" style="text-decoration: none; color: var(--text-primary); font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-blog" style="color: var(--primary-color);"></i>
+                <%= siteName || 'My Blog' %>
+            </a>
+        </div>
+
+        <!-- Navigation -->
+        <nav style="display: flex; align-items: center; gap: 2rem;">
+            <a href="/" style="text-decoration: none; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-home"></i> Trang chủ
+            </a>
+            <a href="/dashboard" style="text-decoration: none; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="/notifications" style="text-decoration: none; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; position: relative;">
+                <i class="fas fa-bell"></i>
+                <span style="position: absolute; top: -8px; right: -8px; background: var(--danger-color); color: white; width: 18px; height: 18px; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center;">5</span>
+            </a>
+            
+            <!-- User Menu -->
+            <div style="position: relative;">
+                <button style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: var(--bg-secondary); border-radius: 8px; cursor: pointer;">
+                    <img src="/images/default-avatar.png" style="width: 32px; height: 32px; border-radius: 50%;">
+                    <span>Admin</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
+</header>

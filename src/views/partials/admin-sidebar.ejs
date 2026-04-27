@@ -1,0 +1,63 @@
+<!-- Admin Sidebar -->
+<aside style="width: 250px; background: var(--bg-primary); border-right: 1px solid var(--border-color); min-height: calc(100vh - 73px); position: fixed; left: 0; top: 73px; overflow-y: auto;">
+    <nav style="padding: 1.5rem 0;">
+        <!-- Dashboard Section -->
+        <div style="padding: 0 1rem; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.75rem;">
+                Dashboard
+            </h3>
+            <a href="/admin/dashboard" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 8px; text-decoration: none; color: var(--text-primary); transition: all 0.3s;">
+                <i class="fas fa-chart-line"></i>
+                <span>Tổng quan</span>
+            </a>
+        </div>
+
+        <!-- Management Section -->
+        <div style="padding: 0 1rem; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.75rem;">
+                Quản lý
+            </h3>
+            <a href="/admin/users" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 8px; text-decoration: none; color: var(--text-primary); transition: all 0.3s;">
+                <i class="fas fa-users"></i>
+                <span>Người dùng</span>
+            </a>
+            <a href="/admin/posts" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 8px; text-decoration: none; color: var(--text-primary); transition: all 0.3s;">
+                <i class="fas fa-file-alt"></i>
+                <span>Bài viết</span>
+            </a>
+            <a href="/admin/categories" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 8px; text-decoration: none; color: var(--text-primary); transition: all 0.3s;">
+                <i class="fas fa-folder"></i>
+                <span>Danh mục</span>
+            </a>
+            <a href="/admin/comments" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 8px; text-decoration: none; color: var(--text-primary); transition: all 0.3s;">
+                <i class="fas fa-comments"></i>
+                <span>Bình luận</span>
+            </a>
+        </div>
+
+        <!-- System Section -->
+        <div style="padding: 0 1rem; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.75rem;">
+                Hệ thống
+            </h3>
+            <a href="/admin/settings" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 8px; text-decoration: none; color: var(--text-primary); transition: all 0.3s;">
+                <i class="fas fa-cog"></i>
+                <span>Cài đặt</span>
+            </a>
+            <a href="/admin/reports" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: 8px; text-decoration: none; color: var(--text-primary); transition: all 0.3s;">
+                <i class="fas fa-chart-bar"></i>
+                <span>Báo cáo</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<style>
+    aside a:hover {
+        background: var(--bg-secondary);
+    }
+    aside a.active {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--primary-color);
+    }
+</style>

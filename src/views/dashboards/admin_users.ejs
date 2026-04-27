@@ -3,132 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý người dùng - Admin Panel</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        .table-container { border-radius: 15px; overflow: hidden; border: none; }
-        .badge-role { min-width: 85px; text-align: center; padding: 6px 10px; }
-        .btn-action { transition: all 0.2s; border-radius: 8px; font-size: 0.85rem; }
-        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-        .avatar-circle { width: 42px; height: 42px; background: linear-gradient(135deg, #0d6efd, #0dcaf0); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; }
-    </style>
+    <title>Quản lý người dùng - Admin</title>
+    <link rel="stylesheet" href="/css/dashboard-widgets.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-light">
-
-    <div class="container py-5">
-        <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white shadow-sm rounded-4 border-start border-primary border-5">
-            <div>
-                <h2 class="fw-bold text-primary mb-1"><i class="bi bi-shield-lock-fill"></i> QUẢN TRỊ VIÊN</h2>
-                <p class="text-muted mb-0">Chào sếp <strong><%= user.name %></strong>. Hệ thống hiện có <span class="badge bg-primary"><%= users.length %></span> thành viên.</p>
-            </div>
-            <div class="d-flex gap-2">
-                <a href="/admin/users/create" class="btn btn-success rounded-pill px-4 shadow-sm fw-bold">
-                    <i class="bi bi-person-plus-fill"></i> Thêm User mới
-                </a>
-                <a href="/admin/posts" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                    <i class="bi bi-journal-text"></i> Bài viết
-                </a>
-                <a href="/admin" class="btn btn-outline-primary rounded-pill px-4">
-                    <i class="bi bi-tags"></i> Danh mục
-                </a>
-                <a href="/logout" class="btn btn-danger rounded-pill px-4">
-                    <i class="bi bi-power"></i> Thoát
-                </a>
-                <a href="/admin/users/export/pdf" class="btn btn-outline-danger">
-    <i class="bi bi-file-earmark-pdf me-1"></i>Xuất PDF Người dùng
-</a>
+<body>
+    <%- include('../../partials/header') %>
+    
+    <div style="display: flex;">
+        <%- include('../../partials/admin-sidebar') %>
+        
+        <main style="flex: 1; margin-left: 250px; padding: 2rem;">
+            <div class="dashboard-container" style="max-width: 100%; margin: 0;">
+                <div class="dashboard-header">
+            <h1><i class="fas fa-users"></i> Quản lý người dùng</h1>
+            <div class="dashboard-actions">
+                <button class="btn-icon" title="Thêm người dùng">
+                    <i class="fas fa-user-plus"></i>
+                </button>
+                <button class="btn-icon" title="Xuất Excel">
+                    <i class="fas fa-file-excel"></i>
+                </button>
+                <button class="btn-icon" title="Làm mới">
+                    <i class="fas fa-sync"></i>
+                </button>
             </div>
         </div>
 
-        <div class="card shadow-sm table-container">
-            <div class="card-header bg-white py-3 border-bottom">
-                <h5 class="card-title mb-0 fw-bold text-secondary"><i class="bi bi-list-stars"></i> Danh sách thành viên</h5>
+        <div class="widgets-grid">
+            <!-- Stats -->
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-users"></i> Tổng người dùng
+                    </div>
+                </div>
+                <div class="stats-value">2,543</div>
+                <div class="stats-label">Đã đăng ký</div>
             </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="ps-4" style="width: 10%">ID</th>
-                                <th style="width: 35%">Thành viên</th>
-                                <th style="width: 15%">Quyền hạn</th>
-                                <th style="width: 20%">Ngày tham gia</th>
-                                <th class="text-end pe-4" style="width: 20%">Thao tác</th>
+
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-user-check"></i> Đang hoạt động
+                    </div>
+                </div>
+                <div class="stats-value">1,892</div>
+                <div class="stats-label">Online hôm nay</div>
+            </div>
+
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-pen-fancy"></i> Tác giả
+                    </div>
+                </div>
+                <div class="stats-value">156</div>
+                <div class="stats-label">Authors</div>
+            </div>
+
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-user-slash"></i> Bị khóa
+                    </div>
+                </div>
+                <div class="stats-value">12</div>
+                <div class="stats-label">Banned</div>
+            </div>
+
+            <!-- Filters & Search -->
+            <div class="widget widget-full">
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                    <input type="text" placeholder="Tìm kiếm người dùng..." style="flex: 1; min-width: 300px; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                    <select style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                        <option>Tất cả vai trò</option>
+                        <option>Admin</option>
+                        <option>Author</option>
+                        <option>User</option>
+                    </select>
+                    <select style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                        <option>Tất cả trạng thái</option>
+                        <option>Đang hoạt động</option>
+                        <option>Bị khóa</option>
+                    </select>
+                    <button style="padding: 0.75rem 1.5rem; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="widget widget-full">
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--bg-secondary); text-align: left;">
+                                <th style="padding: 1rem;">
+                                    <input type="checkbox">
+                                </th>
+                                <th style="padding: 1rem;">Người dùng</th>
+                                <th style="padding: 1rem;">Email</th>
+                                <th style="padding: 1rem;">Vai trò</th>
+                                <th style="padding: 1rem;">Bài viết</th>
+                                <th style="padding: 1rem;">Trạng thái</th>
+                                <th style="padding: 1rem;">Ngày tham gia</th>
+                                <th style="padding: 1rem;">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (users && users.length > 0) { %>
-                                <% users.forEach(u => { %>
-                                    <tr>
-                                        <td class="ps-4 text-muted fw-bold">#<%= u.id %></td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="avatar-circle me-3 shadow-sm text-uppercase">
-                                                    <%= u.name.charAt(0) %>
-                                                </div>
-                                                <div>
-                                                    <div class="fw-bold text-dark"><%= u.name %></div>
-                                                    <div class="small text-muted"><%= u.email %></div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <% 
-                                                let badgeClass = 'bg-primary';
-                                                if(u.role === 'admin') badgeClass = 'bg-danger';
-                                                else if(u.role === 'manager') badgeClass = 'bg-warning text-dark';
-                                            %>
-                                            <span class="badge rounded-pill <%= badgeClass %> badge-role shadow-sm border">
-                                                <%= u.role.toUpperCase() %>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="text-muted small">
-                                                <i class="bi bi-calendar-check me-1"></i> 
-                                                <%= u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : 'N/A' %>
-                                            </span>
-                                        </td>
-                                        <td class="text-end pe-4">
-                                            <% if (u.role !== 'admin') { %>
-                                                <div class="shadow-sm d-inline-flex">
-                                                    <a href="/admin/users/edit/<%= u.id %>" class="btn btn-sm btn-outline-primary btn-action" title="Sửa thông tin">
-                                                        <i class="bi bi-pencil-square"></i> Sửa
-                                                    </a>
-                                                    <form action="/admin/users/delete/<%= u.id %>" method="POST" class="d-inline m-0">
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger btn-action border-start-0" 
-                                                                onclick="return confirm('Sếp chắc chắn muốn xóa vĩnh viễn tay này?')">
-                                                            <i class="bi bi-trash3"></i> Xóa
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            <% } else { %>
-                                                <span class="badge bg-light text-secondary border px-3 py-2 shadow-sm small">
-                                                    <i class="bi bi-person-badge-fill me-1"></i> Đang là sếp
-                                                </span>
-                                            <% } %>
-                                        </td>
-                                    </tr>
-                                <% }) %>
-                            <% } else { %>
-                                <tr>
-                                    <td colspan="5" class="text-center py-5">
-                                        <i class="bi bi-person-x text-muted opacity-25" style="font-size: 4rem;"></i>
-                                        <p class="mt-2 text-muted fw-bold">Chưa có dữ liệu thành viên nào!</p>
-                                    </td>
-                                </tr>
-                            <% } %>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><input type="checkbox"></td>
+                                <td style="padding: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <img src="/images/default-avatar.png" style="width: 40px; height: 40px; border-radius: 50%;">
+                                        <div>
+                                            <strong>John Doe</strong>
+                                            <div style="font-size: 0.875rem; color: var(--text-secondary);">@johndoe</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="padding: 1rem;">john@example.com</td>
+                                <td style="padding: 1rem;">
+                                    <span style="padding: 0.25rem 0.75rem; background: #8b5cf6; color: white; border-radius: 12px; font-size: 0.875rem;">
+                                        Author
+                                    </span>
+                                </td>
+                                <td style="padding: 1rem;">48</td>
+                                <td style="padding: 1rem;">
+                                    <span style="padding: 0.25rem 0.75rem; background: #10b981; color: white; border-radius: 12px; font-size: 0.875rem;">
+                                        Hoạt động
+                                    </span>
+                                </td>
+                                <td style="padding: 1rem;">15/01/2025</td>
+                                <td style="padding: 1rem;">
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer;" title="Xem">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer;" title="Sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; color: var(--danger-color);" title="Khóa">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><input type="checkbox"></td>
+                                <td style="padding: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <img src="/images/default-avatar.png" style="width: 40px; height: 40px; border-radius: 50%;">
+                                        <div>
+                                            <strong>Jane Smith</strong>
+                                            <div style="font-size: 0.875rem; color: var(--text-secondary);">@janesmith</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="padding: 1rem;">jane@example.com</td>
+                                <td style="padding: 1rem;">
+                                    <span style="padding: 0.25rem 0.75rem; background: #3b82f6; color: white; border-radius: 12px; font-size: 0.875rem;">
+                                        User
+                                    </span>
+                                </td>
+                                <td style="padding: 1rem;">0</td>
+                                <td style="padding: 1rem;">
+                                    <span style="padding: 0.25rem 0.75rem; background: #10b981; color: white; border-radius: 12px; font-size: 0.875rem;">
+                                        Hoạt động
+                                    </span>
+                                </td>
+                                <td style="padding: 1rem;">20/03/2026</td>
+                                <td style="padding: 1rem;">
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer;" title="Xem">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer;" title="Sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; color: var(--danger-color);" title="Khóa">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Pagination -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                    <div>Hiển thị 1-20 trong 2,543 người dùng</div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: white; border-radius: 6px; cursor: pointer;">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--primary-color); background: var(--primary-color); color: white; border-radius: 6px;">1</button>
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: white; border-radius: 6px; cursor: pointer;">2</button>
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: white; border-radius: 6px; cursor: pointer;">3</button>
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: white; border-radius: 6px; cursor: pointer;">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <div class="mt-5 text-center">
-            <small class="text-muted text-uppercase fw-lighter" style="letter-spacing: 2px;">Hệ thống quản trị Blog Node.js - Secure by Bcrypt & JWT</small>
-        </div>
+            </div>
+        </main>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

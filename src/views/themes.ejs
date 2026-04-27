@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tùy chỉnh giao diện - <%= siteName %></title>
+    <link rel="stylesheet" href="/css/themes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="theme-customizer">
+        <div class="customizer-header">
+            <h1>🎨 Tùy chỉnh giao diện</h1>
+            <p>Cá nhân hóa trải nghiệm của bạn với các tùy chọn giao diện</p>
+        </div>
+
+        <div class="customizer-layout">
+            <!-- Sidebar -->
+            <div class="customizer-sidebar">
+                <!-- Theme Mode -->
+                <div class="sidebar-section">
+                    <div class="section-title">
+                        <i class="fas fa-moon"></i> Chế độ giao diện
+                    </div>
+                    <div class="mode-selector">
+                        <button class="mode-btn active" data-mode="light">
+                            <i class="fas fa-sun"></i>
+                            <span>Sáng</span>
+                        </button>
+                        <button class="mode-btn" data-mode="dark">
+                            <i class="fas fa-moon"></i>
+                            <span>Tối</span>
+                        </button>
+                        <button class="mode-btn" data-mode="auto">
+                            <i class="fas fa-circle-half-stroke"></i>
+                            <span>Tự động</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Colors -->
+                <div class="sidebar-section">
+                    <div class="section-title">
+                        <i class="fas fa-palette"></i> Màu sắc
+                    </div>
+                    <div class="color-picker-group">
+                        <div class="color-picker-item">
+                            <div class="color-info">
+                                <div class="color-preview" style="background: #3b82f6;"></div>
+                                <div class="color-label">
+                                    <strong>Màu chính</strong>
+                                    <span>#3b82f6</span>
+                                </div>
+                            </div>
+                            <input type="color" class="color-input" value="#3b82f6" id="primaryColor">
+                        </div>
+                        <div class="color-picker-item">
+                            <div class="color-info">
+                                <div class="color-preview" style="background: #8b5cf6;"></div>
+                                <div class="color-label">
+                                    <strong>Màu phụ</strong>
+                                    <span>#8b5cf6</span>
+                                </div>
+                            </div>
+                            <input type="color" class="color-input" value="#8b5cf6" id="secondaryColor">
+                        </div>
+                        <div class="color-picker-item">
+                            <div class="color-info">
+                                <div class="color-preview" style="background: #10b981;"></div>
+                                <div class="color-label">
+                                    <strong>Màu nhấn</strong>
+                                    <span>#10b981</span>
+                                </div>
+                            </div>
+                            <input type="color" class="color-input" value="#10b981" id="accentColor">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Font -->
+                <div class="sidebar-section">
+                    <div class="section-title">
+                        <i class="fas fa-font"></i> Phông chữ
+                    </div>
+                    <div class="font-selector">
+                        <button class="font-option active" data-font="Inter">Inter</button>
+                        <button class="font-option" data-font="Roboto">Roboto</button>
+                        <button class="font-option" data-font="Open Sans">Open Sans</button>
+                    </div>
+                </div>
+
+                <!-- Font Size -->
+                <div class="sidebar-section">
+                    <div class="section-title">
+                        <i class="fas fa-text-height"></i> Kích thước chữ
+                    </div>
+                    <div class="size-selector">
+                        <button class="size-btn" data-size="small">Nhỏ</button>
+                        <button class="size-btn active" data-size="medium">Vừa</button>
+                        <button class="size-btn" data-size="large">Lớn</button>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="saveThemeBtn">
+                        <i class="fas fa-save"></i> Lưu giao diện
+                    </button>
+                    <button class="btn btn-secondary" id="resetThemeBtn">
+                        <i class="fas fa-undo"></i> Đặt lại mặc định
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="customizer-preview">
+                <div class="preview-header">
+                    <h2>Xem trước</h2>
+                    <span class="preview-badge">Live Preview</span>
+                </div>
+
+                <!-- Theme Presets -->
+                <div class="preset-grid">
+                    <div class="preset-card" data-preset="ocean">
+                        <div class="preset-name">
+                            Ocean Blue
+                            <i class="fas fa-check" style="display: none;"></i>
+                        </div>
+                        <div class="preset-colors">
+                            <div class="preset-color" style="background: #0ea5e9;"></div>
+                            <div class="preset-color" style="background: #06b6d4;"></div>
+                            <div class="preset-color" style="background: #14b8a6;"></div>
+                        </div>
+                        <div class="preset-usage">Được sử dụng bởi 1,234 người</div>
+                    </div>
+                    <div class="preset-card" data-preset="forest">
+                        <div class="preset-name">
+                            Forest Green
+                            <i class="fas fa-check" style="display: none;"></i>
+                        </div>
+                        <div class="preset-colors">
+                            <div class="preset-color" style="background: #10b981;"></div>
+                            <div class="preset-color" style="background: #059669;"></div>
+                            <div class="preset-color" style="background: #047857;"></div>
+                        </div>
+                        <div class="preset-usage">Được sử dụng bởi 892 người</div>
+                    </div>
+                </div>
+
+                <!-- Preview Content -->
+                <div class="preview-content">
+                    <div class="preview-card">
+                        <h3>Tiêu đề mẫu</h3>
+                        <p>Đây là đoạn văn bản mẫu để xem trước giao diện. Bạn có thể thay đổi màu sắc, phông chữ và kích thước để phù hợp với sở thích của mình.</p>
+                        <div class="preview-buttons">
+                            <button class="preview-btn preview-btn-primary">Nút chính</button>
+                            <button class="preview-btn preview-btn-secondary">Nút phụ</button>
+                            <button class="preview-btn preview-btn-accent">Nút nhấn</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/theme-switcher.js"></script>
+</body>
+</html>

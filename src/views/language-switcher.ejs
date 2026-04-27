@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn ngôn ngữ - <%= siteName %></title>
+    <link rel="stylesheet" href="/css/language-switcher.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="language-switcher">
+        <button class="language-toggle">
+            <img src="/images/flags/vi.png" alt="Vietnamese" class="language-flag">
+            <span>Tiếng Việt</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <div class="language-dropdown">
+            <div class="language-option active">
+                <img src="/images/flags/vi.png" alt="Vietnamese" class="language-flag">
+                <span class="language-name">Tiếng Việt</span>
+                <span class="language-code">VI</span>
+            </div>
+            <div class="language-option">
+                <img src="/images/flags/en.png" alt="English" class="language-flag">
+                <span class="language-name">English</span>
+                <span class="language-code">EN</span>
+            </div>
+            <div class="language-option">
+                <img src="/images/flags/ja.png" alt="Japanese" class="language-flag">
+                <span class="language-name">日本語</span>
+                <span class="language-code">JA</span>
+            </div>
+            <div class="language-option">
+                <img src="/images/flags/ko.png" alt="Korean" class="language-flag">
+                <span class="language-name">한국어</span>
+                <span class="language-code">KO</span>
+            </div>
+            <div class="language-option">
+                <img src="/images/flags/zh.png" alt="Chinese" class="language-flag">
+                <span class="language-name">中文</span>
+                <span class="language-code">ZH</span>
+            </div>
+            <div class="language-option">
+                <img src="/images/flags/es.png" alt="Spanish" class="language-flag">
+                <span class="language-name">Español</span>
+                <span class="language-code">ES</span>
+            </div>
+            <div class="language-option">
+                <img src="/images/flags/fr.png" alt="French" class="language-flag">
+                <span class="language-name">Français</span>
+                <span class="language-code">FR</span>
+            </div>
+            <div class="language-option">
+                <img src="/images/flags/de.png" alt="German" class="language-flag">
+                <span class="language-name">Deutsch</span>
+                <span class="language-code">DE</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/language-switcher.js"></script>
+</body>
+</html>

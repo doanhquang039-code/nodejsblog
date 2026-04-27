@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm kiếm - <%= siteName %></title>
+    <link rel="stylesheet" href="/css/advanced-search.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="search-container">
+        <!-- Search Header -->
+        <div class="search-header">
+            <div class="search-box-large">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="Tìm kiếm bài viết, người dùng, thẻ..." id="searchInput">
+                <button class="search-btn">Tìm kiếm</button>
+                
+                <!-- Autocomplete Dropdown -->
+                <div class="autocomplete-dropdown" id="autocompleteDropdown">
+                    <!-- Suggestions will be loaded here -->
+                </div>
+            </div>
+
+            <div class="quick-filters">
+                <button class="filter-chip active" data-type="all">
+                    <i class="fas fa-globe"></i> Tất cả
+                </button>
+                <button class="filter-chip" data-type="posts">
+                    <i class="fas fa-file-alt"></i> Bài viết
+                </button>
+                <button class="filter-chip" data-type="users">
+                    <i class="fas fa-users"></i> Người dùng
+                </button>
+                <button class="filter-chip" data-type="tags">
+                    <i class="fas fa-tags"></i> Thẻ
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Layout -->
+        <div class="search-layout">
+            <!-- Filters Sidebar -->
+            <div class="filters-sidebar">
+                <div class="filters-header">
+                    <h3>Bộ lọc</h3>
+                    <button class="clear-filters-btn">Xóa tất cả</button>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-title">Loại nội dung</div>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="checkbox" checked>
+                            <span>Bài viết</span>
+                            <span class="filter-count">1,234</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox">
+                            <span>Người dùng</span>
+                            <span class="filter-count">89</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox">
+                            <span>Bình luận</span>
+                            <span class="filter-count">456</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-title">Danh mục</div>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="checkbox">
+                            <span>Công nghệ</span>
+                            <span class="filter-count">234</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox">
+                            <span>Lập trình</span>
+                            <span class="filter-count">189</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox">
+                            <span>Thiết kế</span>
+                            <span class="filter-count">156</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-title">Thời gian</div>
+                    <div class="date-range">
+                        <input type="date" class="date-input" placeholder="Từ ngày">
+                        <input type="date" class="date-input" placeholder="Đến ngày">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Area -->
+            <div class="results-area">
+                <div class="results-header">
+                    <div class="results-count">
+                        Tìm thấy <strong>1,234</strong> kết quả
+                    </div>
+                    <div class="sort-dropdown">
+                        <label>Sắp xếp:</label>
+                        <select>
+                            <option>Liên quan nhất</option>
+                            <option>Mới nhất</option>
+                            <option>Cũ nhất</option>
+                            <option>Phổ biến nhất</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="results-list" id="resultsList">
+                    <!-- Results will be loaded here -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">...</button>
+                    <button class="page-btn">10</button>
+                    <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search History -->
+        <div class="search-history">
+            <div class="history-header">
+                <h3>Lịch sử tìm kiếm</h3>
+                <button class="clear-filters-btn">Xóa lịch sử</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <!-- History items will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/advanced-search.js"></script>
+</body>
+</html>

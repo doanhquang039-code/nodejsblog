@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author Dashboard - <%= siteName %></title>
+    <link rel="stylesheet" href="/css/dashboard-widgets.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-pen-fancy"></i> Author Dashboard</h1>
+            <div class="dashboard-actions">
+                <button class="btn-icon" title="Viết bài mới">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button class="btn-icon" title="Bản nháp">
+                    <i class="fas fa-file-alt"></i>
+                </button>
+                <button class="btn-icon" title="Làm mới">
+                    <i class="fas fa-sync"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="widgets-grid">
+            <!-- Author Stats -->
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-file-alt"></i> Bài viết của tôi
+                    </div>
+                </div>
+                <div class="stats-value">48</div>
+                <div class="stats-label">Đã xuất bản</div>
+                <span class="stats-change positive">
+                    <i class="fas fa-arrow-up"></i> 8.2%
+                </span>
+            </div>
+
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-eye"></i> Lượt xem
+                    </div>
+                </div>
+                <div class="stats-value">12,543</div>
+                <div class="stats-label">Tổng lượt xem</div>
+                <span class="stats-change positive">
+                    <i class="fas fa-arrow-up"></i> 12.5%
+                </span>
+            </div>
+
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-comments"></i> Tương tác
+                    </div>
+                </div>
+                <div class="stats-value">324</div>
+                <div class="stats-label">Bình luận</div>
+                <span class="stats-change positive">
+                    <i class="fas fa-arrow-up"></i> 15.3%
+                </span>
+            </div>
+
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-users"></i> Người theo dõi
+                    </div>
+                </div>
+                <div class="stats-value">1,234</div>
+                <div class="stats-label">Followers</div>
+                <span class="stats-change positive">
+                    <i class="fas fa-arrow-up"></i> 5.7%
+                </span>
+            </div>
+
+            <!-- Quick Actions for Authors -->
+            <div class="widget widget-medium">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-bolt"></i> Thao tác nhanh
+                    </div>
+                </div>
+                <div class="quick-actions-widget">
+                    <button class="quick-action-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Bài viết mới</span>
+                    </button>
+                    <button class="quick-action-btn">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Bản nháp (5)</span>
+                    </button>
+                    <button class="quick-action-btn">
+                        <i class="fas fa-image"></i>
+                        <span>Thư viện ảnh</span>
+                    </button>
+                    <button class="quick-action-btn">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Thống kê</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Writing Progress -->
+            <div class="widget widget-medium">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-tasks"></i> Mục tiêu tháng này
+                    </div>
+                </div>
+                <div class="progress-list">
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span class="progress-label">Bài viết</span>
+                            <span class="progress-value">8/10</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span class="progress-label">Lượt xem</span>
+                            <span class="progress-value">12,543/15,000</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 84%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span class="progress-label">Tương tác</span>
+                            <span class="progress-value">324/500</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 65%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Views Chart -->
+            <div class="widget widget-large chart-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-chart-line"></i> Lượt xem theo thời gian
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="viewsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Engagement Chart -->
+            <div class="widget widget-large chart-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-heart"></i> Tương tác
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="engagementChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Posts -->
+            <div class="widget widget-medium">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-file-alt"></i> Bài viết gần đây
+                    </div>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Hướng dẫn Node.js</div>
+                            <div class="activity-time">1,234 lượt xem • 2 giờ trước</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon info">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">React Best Practices</div>
+                            <div class="activity-time">892 lượt xem • 1 ngày trước</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon warning">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">JavaScript Tips (Bản nháp)</div>
+                            <div class="activity-time">Chưa xuất bản</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Comments -->
+            <div class="widget widget-medium">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-comments"></i> Bình luận mới
+                    </div>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon info">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">User123 đã bình luận</div>
+                            <div class="activity-time">"Bài viết rất hay!" • 5 phút trước</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon info">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Reader456 đã bình luận</div>
+                            <div class="activity-time">"Cảm ơn bạn!" • 15 phút trước</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Posts -->
+            <div class="widget widget-full">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-fire"></i> Bài viết nổi bật
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--bg-secondary); text-align: left;">
+                                <th style="padding: 1rem;">Tiêu đề</th>
+                                <th style="padding: 1rem;">Lượt xem</th>
+                                <th style="padding: 1rem;">Bình luận</th>
+                                <th style="padding: 1rem;">Lượt thích</th>
+                                <th style="padding: 1rem;">Ngày đăng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><strong>Hướng dẫn Node.js cho người mới</strong></td>
+                                <td style="padding: 1rem;">3,456</td>
+                                <td style="padding: 1rem;">89</td>
+                                <td style="padding: 1rem;">234</td>
+                                <td style="padding: 1rem;">25/04/2026</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><strong>React Best Practices 2026</strong></td>
+                                <td style="padding: 1rem;">2,891</td>
+                                <td style="padding: 1rem;">67</td>
+                                <td style="padding: 1rem;">189</td>
+                                <td style="padding: 1rem;">23/04/2026</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/dashboard-widgets.js"></script>
+</body>
+</html>

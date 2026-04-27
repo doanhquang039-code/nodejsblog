@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông báo - <%= siteName %></title>
+    <link rel="stylesheet" href="/css/notifications.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="notifications-container">
+        <div class="notifications-header">
+            <h1><i class="fas fa-bell"></i> Thông báo</h1>
+            <div class="header-actions">
+                <button class="btn-icon" id="markAllReadBtn" title="Đánh dấu tất cả đã đọc">
+                    <i class="fas fa-check-double"></i>
+                </button>
+                <button class="btn-icon" id="settingsBtn" title="Cài đặt">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="notification-tabs">
+            <button class="tab-btn active" data-tab="all">
+                <i class="fas fa-inbox"></i> Tất cả
+                <span class="badge" id="allCount">0</span>
+            </button>
+            <button class="tab-btn" data-tab="unread">
+                <i class="fas fa-envelope"></i> Chưa đọc
+                <span class="badge badge-primary" id="unreadCount">0</span>
+            </button>
+            <button class="tab-btn" data-tab="like">
+                <i class="fas fa-heart"></i> Lượt thích
+            </button>
+            <button class="tab-btn" data-tab="comment">
+                <i class="fas fa-comment"></i> Bình luận
+            </button>
+            <button class="tab-btn" data-tab="follow">
+                <i class="fas fa-user-plus"></i> Theo dõi
+            </button>
+            <button class="tab-btn" data-tab="achievement">
+                <i class="fas fa-trophy"></i> Thành tích
+            </button>
+        </div>
+
+        <!-- Notifications List -->
+        <div class="notifications-list" id="notificationsList">
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Đang tải thông báo...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fas fa-bell-slash"></i>
+                <h3>Không có thông báo</h3>
+                <p>Bạn chưa có thông báo nào</p>
+            </div>
+
+            <!-- Notifications will be inserted here -->
+        </div>
+
+        <!-- Load More -->
+        <div class="load-more" id="loadMore" style="display: none;">
+            <button class="btn-secondary">
+                <i class="fas fa-chevron-down"></i> Xem thêm
+            </button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Cài đặt thông báo</h2>
+                <button class="close-btn" onclick="closeModal('settingsModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Loại thông báo</h3>
+                    <div class="setting-item">
+                        <label class="switch">
+                            <input type="checkbox" id="emailNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <div class="setting-info">
+                            <strong>Email thông báo</strong>
+                            <p>Nhận thông báo qua email</p>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label class="switch">
+                            <input type="checkbox" id="pushNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <div class="setting-info">
+                            <strong>Push notifications</strong>
+                            <p>Nhận thông báo trên trình duyệt</p>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label class="switch">
+                            <input type="checkbox" id="realtimeNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <div class="setting-info">
+                            <strong>Thông báo real-time</strong>
+                            <p>Nhận thông báo ngay lập tức</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Giờ im lặng</h3>
+                    <div class="time-range">
+                        <div class="time-input">
+                            <label>Từ</label>
+                            <input type="time" id="quietHoursStart" value="22:00">
+                        </div>
+                        <div class="time-input">
+                            <label>Đến</label>
+                            <input type="time" id="quietHoursEnd" value="07:00">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('settingsModal')">Hủy</button>
+                <button class="btn-primary" id="saveSettingsBtn">
+                    <i class="fas fa-save"></i> Lưu cài đặt
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Widget (Floating) -->
+    <div class="notification-widget" id="notificationWidget">
+        <button class="widget-toggle" id="widgetToggle">
+            <i class="fas fa-bell"></i>
+            <span class="widget-badge" id="widgetBadge">0</span>
+        </button>
+        <div class="widget-dropdown" id="widgetDropdown">
+            <div class="widget-header">
+                <h3>Thông báo</h3>
+                <a href="/notifications">Xem tất cả</a>
+            </div>
+            <div class="widget-list" id="widgetList">
+                <!-- Recent notifications -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/notifications.js"></script>
+    <script>
+        // Initialize notification manager
+        const notificationManager = new NotificationManager();
+    </script>
+</body>
+</html>

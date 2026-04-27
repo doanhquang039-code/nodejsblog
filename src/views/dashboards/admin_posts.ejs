@@ -3,175 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Nội dung - Admin Panel</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        :root { --admin-green: #198754; --admin-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
-        .table-container { border-radius: 15px; background: white; box-shadow: var(--admin-shadow); border: none; overflow: hidden; }
-        .media-box { position: relative; width: 60px; height: 60px; }
-        .post-img-thumb { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
-        .video-indicator { position: absolute; bottom: -5px; right: -5px; background: var(--admin-green); color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 10px; border: 2px solid white; }
-        .nav-pills .nav-link.active { background-color: var(--admin-green); color: white !important; }
-        .post-title { color: #2c3e50; text-decoration: none; font-weight: 600; display: block; font-size: 0.95rem; }
-        .post-title:hover { color: var(--admin-green); }
-        .top-card { border-radius: 15px; border: none; box-shadow: var(--admin-shadow); }
-    </style>
+    <title>Quản lý bài viết - Admin</title>
+    <link rel="stylesheet" href="/css/dashboard-widgets.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="py-4">
-    <div class="container-fluid px-4">
-        <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white rounded-4 shadow-sm border-start border-success border-5">
-            <div>
-                <h2 class="fw-bold text-success mb-1"><i class="bi bi-journal-richtext me-2"></i>QUẢN LÝ NỘI DUNG</h2>
-                <p class="text-muted mb-0">Chào sếp <strong><%= user.name %></strong>. Có <%= approvedPosts.length + pendingPosts.length %> bài viết trên hệ thống.</p>
+<body>
+    <%- include('../../partials/header') %>
+    
+    <div style="display: flex;">
+        <%- include('../../partials/admin-sidebar') %>
+        
+        <main style="flex: 1; margin-left: 250px; padding: 2rem;">
+            <div class="dashboard-container" style="max-width: 100%; margin: 0;">
+                <div class="dashboard-header">
+            <h1><i class="fas fa-file-alt"></i> Quản lý bài viết</h1>
+            <div class="dashboard-actions">
+                <button class="btn-icon" title="Thêm bài viết">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button class="btn-icon" title="Xuất Excel">
+                    <i class="fas fa-file-excel"></i>
+                </button>
+                <button class="btn-icon" title="Làm mới">
+                    <i class="fas fa-sync"></i>
+                </button>
             </div>
-            <div class="d-flex gap-2">
-                <a href="/admin/posts/create" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
-                    <i class="bi bi-plus-circle me-2"></i>Viết bài mới
-                </a>
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle rounded-pill" data-bs-toggle="dropdown">Báo cáo</button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/admin/posts/export/excel">Xuất Excel</a></li>
-                        <li><a class="dropdown-item" href="/admin/posts/export/pdf">Xuất PDF</a></li>
-                    </ul>
+        </div>
+
+        <div class="widgets-grid">
+            <!-- Stats -->
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-file-alt"></i> Tổng bài viết
+                    </div>
+                </div>
+                <div class="stats-value">1,248</div>
+                <div class="stats-label">Đã xuất bản</div>
+            </div>
+
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-clock"></i> Chờ duyệt
+                    </div>
+                </div>
+                <div class="stats-value">12</div>
+                <div class="stats-label">Cần xem xét</div>
+            </div>
+
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-file"></i> Bản nháp
+                    </div>
+                </div>
+                <div class="stats-value">45</div>
+                <div class="stats-label">Chưa hoàn thành</div>
+            </div>
+
+            <div class="widget widget-small stats-widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <i class="fas fa-trash"></i> Đã xóa
+                    </div>
+                </div>
+                <div class="stats-value">23</div>
+                <div class="stats-label">Trong thùng rác</div>
+            </div>
+
+            <!-- Filters & Search -->
+            <div class="widget widget-full">
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                    <input type="text" placeholder="Tìm kiếm bài viết..." style="flex: 1; min-width: 300px; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                    <select style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                        <option>Tất cả trạng thái</option>
+                        <option>Đã xuất bản</option>
+                        <option>Chờ duyệt</option>
+                        <option>Bản nháp</option>
+                    </select>
+                    <select style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                        <option>Tất cả danh mục</option>
+                        <option>Công nghệ</option>
+                        <option>Lập trình</option>
+                        <option>Thiết kế</option>
+                    </select>
+                    <button style="padding: 0.75rem 1.5rem; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                </div>
+            </div>
+
+            <!-- Posts Table -->
+            <div class="widget widget-full">
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--bg-secondary); text-align: left;">
+                                <th style="padding: 1rem;">
+                                    <input type="checkbox">
+                                </th>
+                                <th style="padding: 1rem;">Tiêu đề</th>
+                                <th style="padding: 1rem;">Tác giả</th>
+                                <th style="padding: 1rem;">Danh mục</th>
+                                <th style="padding: 1rem;">Trạng thái</th>
+                                <th style="padding: 1rem;">Lượt xem</th>
+                                <th style="padding: 1rem;">Ngày đăng</th>
+                                <th style="padding: 1rem;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><input type="checkbox"></td>
+                                <td style="padding: 1rem;">
+                                    <strong>Hướng dẫn Node.js cho người mới</strong>
+                                </td>
+                                <td style="padding: 1rem;">John Doe</td>
+                                <td style="padding: 1rem;">Lập trình</td>
+                                <td style="padding: 1rem;">
+                                    <span style="padding: 0.25rem 0.75rem; background: #10b981; color: white; border-radius: 12px; font-size: 0.875rem;">
+                                        Đã xuất bản
+                                    </span>
+                                </td>
+                                <td style="padding: 1rem;">3,456</td>
+                                <td style="padding: 1rem;">25/04/2026</td>
+                                <td style="padding: 1rem;">
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer;" title="Xem">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer;" title="Sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; color: var(--danger-color);" title="Xóa">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><input type="checkbox"></td>
+                                <td style="padding: 1rem;">
+                                    <strong>React Best Practices 2026</strong>
+                                </td>
+                                <td style="padding: 1rem;">Jane Smith</td>
+                                <td style="padding: 1rem;">Frontend</td>
+                                <td style="padding: 1rem;">
+                                    <span style="padding: 0.25rem 0.75rem; background: #f59e0b; color: white; border-radius: 12px; font-size: 0.875rem;">
+                                        Chờ duyệt
+                                    </span>
+                                </td>
+                                <td style="padding: 1rem;">0</td>
+                                <td style="padding: 1rem;">27/04/2026</td>
+                                <td style="padding: 1rem;">
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer;" title="Xem">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer;" title="Duyệt">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; color: var(--danger-color);" title="Từ chối">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                    <div>Hiển thị 1-20 trong 1,248 bài viết</div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: white; border-radius: 6px; cursor: pointer;">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--primary-color); background: var(--primary-color); color: white; border-radius: 6px;">1</button>
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: white; border-radius: 6px; cursor: pointer;">2</button>
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: white; border-radius: 6px; cursor: pointer;">3</button>
+                        <button style="padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: white; border-radius: 6px; cursor: pointer;">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-
-       <form action="/admin/posts/search" method="GET" class="d-flex mb-4">
-    <input type="text" name="author" ...>
-    <button type="submit">Tìm</button>
-</form>
-
-        <div class="row g-4">
-            <div class="col-lg-9">
-                <div class="card table-container">
-                    <div class="card-header bg-white pt-3 border-0">
-                        <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                            <li class="nav-item">
-                                <button class="nav-link active rounded-pill me-2" data-bs-toggle="pill" data-bs-target="#tab-all">Tất cả</button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link rounded-pill me-2 text-success" data-bs-toggle="pill" data-bs-target="#tab-approved">Đã đăng (<%= approvedPosts.length %>)</button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link rounded-pill text-warning" data-bs-toggle="pill" data-bs-target="#tab-pending">Chờ duyệt (<%= pendingPosts.length %>)</button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="tab-content">
-                            <% function renderTable(postList) { %>
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle mb-0">
-                                        <thead class="table-light text-secondary small text-uppercase">
-                                            <tr>
-                                                <th class="ps-4">Media</th>
-                                                <th>Nội dung</th>
-                                                <th>Tác giả</th>
-                                                <th>Thống kê</th>
-                                                <th>Trạng thái</th>
-                                                <th class="text-end pe-4">Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% if (postList.length > 0) { %>
-                                                <% postList.forEach(p => { %>
-                                                    <tr>
-                                                        <td class="ps-4">
-                                                            <div class="media-box">
-                                                                <img src="<%= p.image || 'https://via.placeholder.com/150' %>" class="post-img-thumb">
-                                                                <% if(p.video) { %><div class="video-indicator"><i class="bi bi-play-fill"></i></div><% } %>
-                                                            </div>
-                                                        </td>
-                                                        <li><a class="dropdown-item" href="/admin/posts/export/pdf">Xuất PDF</a></li>
-                                                        <td>
-                                                            <a href="/admin/posts/view/<%= p.id %>" class="post-title"><%= p.title %></a>
-                                                            <small class="text-muted"><%= p.category ? p.category.name : 'Mặc định' %></small>
-                                                        </td>
-                                                        <td>
-                                                            <div class="small fw-bold"><%= p.author ? p.author.name : 'Ẩn danh' %></div>
-                                                            <div class="text-muted small"><%= p.createdAt ? new Date(p.createdAt).toLocaleDateString('vi-VN') : '' %></div>
-                                                        </td>
-                                                        <td>
-                                                            <small class="d-block text-primary"><i class="bi bi-eye"></i> <%= p.stats ? p.stats.view_count : 0 %></small>
-                                                            <small class="d-block text-danger"><i class="bi bi-heart-fill"></i> <%= p.stats ? p.stats.like_count : 0 %></small>
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge rounded-pill <%= p.status === 'approved' ? 'bg-success' : 'bg-warning text-dark' %>" style="font-size: 0.65rem;">
-                                                                <%= p.status === 'approved' ? 'ĐÃ ĐĂNG' : 'CHỜ DUYỆT' %>
-                                                            </span>
-                                                        </td>
-                                                        <td class="text-end pe-4">
-                                                            <div class="btn-group">
-                                                                <% if (p.status === 'pending' && (user.role === 'admin' || user.role === 'manager')) { %>
-                                                                    <form action="/admin/posts/approve/<%= p.id %>" method="POST" class="d-inline">
-                                                                        <input type="hidden" name="action" value="approved">
-                                                                        <button type="submit" class="btn btn-sm btn-light text-success border-end"><i class="bi bi-check-lg"></i></button>
-                                                                    </form>
-                                                                <% } %>
-                                                                <a href="/admin/posts/view/<%= p.id %>" class="btn btn-sm btn-light border-end"><i class="bi bi-eye"></i></a>
-                                                                <a href="/admin/posts/edit/<%= p.id %>" class="btn btn-sm btn-light text-primary border-end"><i class="bi bi-pencil"></i></a>
-                                                                <form action="/admin/posts/delete/<%= p.id %>" method="POST" onsubmit="return confirm('Xóa nhé sếp?')">
-                                                                    <button type="submit" class="btn btn-sm btn-light text-danger"><i class="bi bi-trash"></i></button>
-                                                                </form>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                <% }) %>
-                                            <% } else { %>
-                                                <tr><td colspan="6" class="text-center py-5 text-muted">Không có bài viết nào.</td></tr>
-                                            <% } %>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <% } %>
-
-                            <div class="tab-pane fade show active" id="tab-all">
-                                <% renderTable([...approvedPosts, ...pendingPosts]) %>
-                            </div>
-                            <div class="tab-pane fade" id="tab-approved">
-                                <% renderTable(approvedPosts) %>
-                            </div>
-                            <div class="tab-pane fade" id="tab-pending">
-                                <% renderTable(pendingPosts) %>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-            <div class="col-lg-3">
-                <div class="card top-card overflow-hidden">
-                    <div class="card-header bg-dark text-white py-3">
-                        <h6 class="mb-0 fw-bold"><i class="bi bi-fire text-danger me-2"></i>BÀI VIẾT HOT NHẤT</h6>
-                    </div>
-                    <div class="list-group list-group-flush">
-                        <% if(typeof topLiked !== 'undefined' && topLiked.length > 0) { %>
-                            <% topLiked.forEach((p, i) => { %>
-                                <div class="list-group-item py-3">
-                                    <div class="d-flex align-items-start">
-                                        <span class="badge bg-light text-dark me-2">#<%= i+1 %></span>
-                                        <div class="overflow-hidden">
-                                            <a href="/admin/posts/view/<%= p.id %>" class="text-dark text-decoration-none small fw-bold d-block text-truncate"><%= p.title %></a>
-                                            <div class="text-danger small" style="font-size: 0.75rem;">
-                                                <i class="bi bi-heart-fill me-1"></i><%= p.stats ? p.stats.like_count : 0 %> Tim
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <% }) %>
-                        <% } else { %>
-                            <div class="p-4 text-center text-muted small">Chưa có bài viết nổi bật.</div>
-                        <% } %>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

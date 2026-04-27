@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thành tích - <%= siteName %></title>
+    <link rel="stylesheet" href="/css/achievements.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="achievements-container">
+        <div class="achievements-header">
+            <h1><i class="fas fa-trophy"></i> Thành tích & Bảng xếp hạng</h1>
+            <p>Theo dõi tiến trình và so sánh với cộng đồng</p>
+        </div>
+
+        <!-- User Stats Card -->
+        <div class="user-stats-card">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="userPoints">0</div>
+                    <div class="stat-label">Điểm</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="userLevel">1</div>
+                    <div class="stat-label">Cấp độ</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="userAchievements">0/10</div>
+                    <div class="stat-label">Thành tích</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="userRank">#-</div>
+                    <div class="stat-label">Xếp hạng</div>
+                </div>
+            </div>
+            <div class="level-progress">
+                <div class="level-info">
+                    <span>Cấp độ 1</span>
+                    <span>0 / 100 điểm</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="achievements-tabs">
+            <button class="tab-btn active" data-tab="all">
+                <i class="fas fa-trophy"></i> Tất cả thành tích
+            </button>
+            <button class="tab-btn" data-tab="unlocked">
+                <i class="fas fa-check-circle"></i> Đã mở khóa
+            </button>
+            <button class="tab-btn" data-tab="locked">
+                <i class="fas fa-lock"></i> Chưa mở khóa
+            </button>
+            <button class="tab-btn" data-tab="leaderboard">
+                <i class="fas fa-ranking-star"></i> Bảng xếp hạng
+            </button>
+        </div>
+
+        <!-- Achievements Grid -->
+        <div class="achievements-grid" id="achievementsGrid">
+            <!-- Achievements will be loaded here -->
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div class="leaderboard-section" id="leaderboardSection" style="display: none;">
+            <div class="leaderboard-header">
+                <h2><i class="fas fa-ranking-star"></i> Bảng xếp hạng</h2>
+                <div class="leaderboard-filters">
+                    <button class="filter-btn active" data-period="all">Tất cả</button>
+                    <button class="filter-btn" data-period="week">Tuần này</button>
+                    <button class="filter-btn" data-period="month">Tháng này</button>
+                </div>
+            </div>
+
+            <!-- Top 3 Podium -->
+            <div class="podium">
+                <div class="podium-place second">
+                    <img src="/images/default-avatar.png" alt="Avatar" class="podium-avatar">
+                    <div class="podium-rank">2</div>
+                    <div class="podium-name">User 2</div>
+                    <div class="podium-points">850 điểm</div>
+                </div>
+                <div class="podium-place first">
+                    <img src="/images/default-avatar.png" alt="Avatar" class="podium-avatar">
+                    <div class="podium-rank">1</div>
+                    <div class="podium-name">User 1</div>
+                    <div class="podium-points">1,250 điểm</div>
+                </div>
+                <div class="podium-place third">
+                    <img src="/images/default-avatar.png" alt="Avatar" class="podium-avatar">
+                    <div class="podium-rank">3</div>
+                    <div class="podium-name">User 3</div>
+                    <div class="podium-points">720 điểm</div>
+                </div>
+            </div>
+
+            <!-- Leaderboard List -->
+            <div class="leaderboard-list" id="leaderboardList">
+                <!-- Leaderboard items will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/achievements.js"></script>
+</body>
+</html>

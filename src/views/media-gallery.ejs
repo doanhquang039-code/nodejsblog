@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư viện Media - <%= siteName %></title>
+    <link rel="stylesheet" href="/css/media-gallery.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="gallery-container">
+        <div class="gallery-layout">
+            <!-- Sidebar -->
+            <div class="gallery-sidebar">
+                <button class="upload-btn" id="uploadBtn">
+                    <i class="fas fa-cloud-upload"></i> Tải lên
+                </button>
+
+                <div class="folders-section">
+                    <h3>Thư mục</h3>
+                    <div class="folders-list">
+                        <div class="folder-item active">
+                            <i class="fas fa-folder folder-icon"></i>
+                            <span class="folder-name">Tất cả</span>
+                            <span class="folder-count">128</span>
+                        </div>
+                        <div class="folder-item">
+                            <i class="fas fa-image folder-icon"></i>
+                            <span class="folder-name">Hình ảnh</span>
+                            <span class="folder-count">95</span>
+                        </div>
+                        <div class="folder-item">
+                            <i class="fas fa-video folder-icon"></i>
+                            <span class="folder-name">Video</span>
+                            <span class="folder-count">18</span>
+                        </div>
+                        <div class="folder-item">
+                            <i class="fas fa-file folder-icon"></i>
+                            <span class="folder-name">Tài liệu</span>
+                            <span class="folder-count">15</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="gallery-main">
+                <div class="gallery-header">
+                    <h1 class="gallery-title">Thư viện Media</h1>
+                    <div class="gallery-actions">
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="grid">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-btn" data-view="list">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-toolbar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Tìm kiếm media...">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">Tất cả</button>
+                        <button class="filter-btn" data-filter="image">Hình ảnh</button>
+                        <button class="filter-btn" data-filter="video">Video</button>
+                        <button class="filter-btn" data-filter="document">Tài liệu</button>
+                    </div>
+                </div>
+
+                <!-- Grid View -->
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Media items will be loaded here -->
+                </div>
+
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea" style="display: none;">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload"></i>
+                    </div>
+                    <div class="upload-text">Kéo thả file vào đây</div>
+                    <div class="upload-hint">hoặc nhấp để chọn file</div>
+                    <input type="file" id="fileInput" multiple style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Media Detail Modal -->
+    <div class="modal" id="mediaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Chi tiết Media</h2>
+                <button class="close-btn" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="Media" class="modal-image" id="modalImage">
+                <div class="modal-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Tên file</div>
+                        <div class="detail-value" id="fileName">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Kích thước</div>
+                        <div class="detail-value" id="fileSize">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Loại</div>
+                        <div class="detail-value" id="fileType">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Ngày tải lên</div>
+                        <div class="detail-value" id="uploadDate">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/media-gallery.js"></script>
+</body>
+</html>
