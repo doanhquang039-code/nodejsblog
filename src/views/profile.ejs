@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= profile.name %> - Profile</title>
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="cover-image" style="background-image: url('<%= profile.coverImage || '/images/default-cover.jpg' %>')">
+            <div class="cover-overlay"></div>
+        </div>
+        
+        <div class="container">
+            <div class="profile-header-content">
+                <div class="profile-avatar-section">
+                    <img src="<%= profile.avatar || '/images/default-avatar.png' %>" alt="<%= profile.name %>" class="profile-avatar">
+                    <% if (profile.badges && profile.badges.length > 0) { %>
+                        <div class="profile-badges">
+                            <% profile.badges.slice(0, 3).forEach(badge => { %>
+                                <span class="badge-icon" title="<%= badge.badgeName %>" style="background: <%= badge.badgeColor %>">
+                                    <%= badge.badgeIcon || '🏆' %>
+                                </span>
+                            <% }) %>
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-name-section">
+                        <h1 class="profile-name"><%= profile.name %></h1>
+                        <p class="profile-username">@<%= profile.username %></p>
+                    </div>
+                    
+                    <% if (profile.bio) { %>
+                        <p class="profile-bio"><%= profile.bio %></p>
+                    <% } %>
+
+                    <div class="profile-meta">
+                        <% if (profile.location) { %>
+                            <span class="meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <%= profile.location %>
+                            </span>
+                        <% } %>
+                        <% if (profile.website) { %>
+                            <span class="meta-item">
+                                <i class="fas fa-link"></i>
+                                <a href="<%= profile.website %>" target="_blank"><%= profile.website %></a>
+                            </span>
+                        <% } %>
+                        <span class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            Tham gia <%= new Date(profile.createdAt).toLocaleDateString('vi-VN') %>
+                        </span>
+                    </div>
+
+                    <% if (profile.socialLinks) { %>
+                        <div class="social-links">
+                            <% const social = JSON.parse(profile.socialLinks); %>
+                            <% if (social.twitter) { %>
+                                <a href="https://twitter.com/<%= social.twitter %>" target="_blank" class="social-link">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            <% } %>
+                            <% if (social.github) { %>
+                                <a href="https://github.com/<%= social.github %>" target="_blank" class="social-link">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            <% } %>
+                            <% if (social.linkedin) { %>
+                                <a href="https://linkedin.com/in/<%= social.linkedin %>" target="_blank" class="social-link">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="profile-actions">
+                    <% if (isOwnProfile) { %>
+                        <button class="btn btn-primary" onclick="location.href='/profile/edit'">
+                            <i class="fas fa-edit"></i>
+                            Chỉnh sửa profile
+                        </button>
+                    <% } else { %>
+                        <button class="btn <%= isFollowing ? 'btn-secondary' : 'btn-primary' %>" onclick="toggleFollow(<%= profile.id %>)">
+                            <i class="fas fa-<%= isFollowing ? 'user-check' : 'user-plus' %>"></i>
+                            <%= isFollowing ? 'Đang theo dõi' : 'Theo dõi' %>
+                        </button>
+                        <button class="btn btn-secondary" onclick="sendMessage(<%= profile.id %>)">
+                            <i class="fas fa-envelope"></i>
+                            Nhắn tin
+                        </button>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-value"><%= stats.posts %></div>
+                    <div class="stat-label">Bài viết</div>
+                </div>
+                <div class="stat-item" onclick="showFollowers()">
+                    <div class="stat-value"><%= stats.followers %></div>
+                    <div class="stat-label">Người theo dõi</div>
+                </div>
+                <div class="stat-item" onclick="showFollowing()">
+                    <div class="stat-value"><%= stats.following %></div>
+                    <div class="stat-label">Đang theo dõi</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value"><%= stats.likesReceived %></div>
+                    <div class="stat-label">Lượt thích</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="container profile-content">
+        <div class="content-wrapper">
+            <!-- Sidebar -->
+            <aside class="profile-sidebar">
+                <!-- Skills -->
+                <% if (profile.skills) { %>
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-code"></i>
+                            Kỹ năng
+                        </h3>
+                        <div class="skills-list">
+                            <% profile.skills.split(',').forEach(skill => { %>
+                                <span class="skill-tag"><%= skill.trim() %></span>
+                            <% }) %>
+                        </div>
+                    </div>
+                <% } %>
+
+                <!-- Interests -->
+                <% if (profile.interests) { %>
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-heart"></i>
+                            Sở thích
+                        </h3>
+                        <div class="interests-list">
+                            <% profile.interests.split(',').forEach(interest => { %>
+                                <span class="interest-tag"><%= interest.trim() %></span>
+                            <% }) %>
+                        </div>
+                    </div>
+                <% } %>
+
+                <!-- Badges -->
+                <% if (profile.badges && profile.badges.length > 0) { %>
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-trophy"></i>
+                            Huy hiệu
+                        </h3>
+                        <div class="badges-list">
+                            <% profile.badges.forEach(badge => { %>
+                                <div class="badge-item" title="<%= badge.badgeDescription %>">
+                                    <span class="badge-icon-large" style="background: <%= badge.badgeColor %>">
+                                        <%= badge.badgeIcon || '🏆' %>
+                                    </span>
+                                    <div class="badge-info">
+                                        <div class="badge-name"><%= badge.badgeName %></div>
+                                        <div class="badge-date">
+                                            <%= new Date(badge.earnedAt).toLocaleDateString('vi-VN') %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                <% } %>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="profile-main">
+                <!-- Tabs -->
+                <div class="profile-tabs">
+                    <button class="tab-btn active" data-tab="posts">
+                        <i class="fas fa-newspaper"></i>
+                        Bài viết
+                    </button>
+                    <button class="tab-btn" data-tab="activity">
+                        <i class="fas fa-chart-line"></i>
+                        Hoạt động
+                    </button>
+                    <button class="tab-btn" data-tab="about">
+                        <i class="fas fa-info-circle"></i>
+                        Giới thiệu
+                    </button>
+                </div>
+
+                <!-- Tab Content: Posts -->
+                <div class="tab-content active" id="posts-tab">
+                    <% if (recentPosts && recentPosts.length > 0) { %>
+                        <div class="posts-grid">
+                            <% recentPosts.forEach(post => { %>
+                                <article class="post-card">
+                                    <% if (post.featuredImage) { %>
+                                        <div class="post-image">
+                                            <img src="<%= post.featuredImage %>" alt="<%= post.title %>">
+                                        </div>
+                                    <% } %>
+                                    <div class="post-content">
+                                        <h3 class="post-title">
+                                            <a href="/posts/<%= post.slug %>"><%= post.title %></a>
+                                        </h3>
+                                        <p class="post-excerpt"><%= post.excerpt %></p>
+                                        <div class="post-meta">
+                                            <span>
+                                                <i class="fas fa-eye"></i>
+                                                <%= post.views %>
+                                            </span>
+                                            <span>
+                                                <i class="fas fa-heart"></i>
+                                                <%= post.likes %>
+                                            </span>
+                                            <span>
+                                                <i class="fas fa-calendar"></i>
+                                                <%= new Date(post.createdAt).toLocaleDateString('vi-VN') %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </article>
+                            <% }) %>
+                        </div>
+                        <div class="load-more">
+                            <button class="btn btn-secondary" onclick="loadMorePosts()">
+                                Xem thêm bài viết
+                            </button>
+                        </div>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <i class="fas fa-newspaper"></i>
+                            <h3>Chưa có bài viết nào</h3>
+                            <p>Người dùng này chưa đăng bài viết nào.</p>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Tab Content: Activity -->
+                <div class="tab-content" id="activity-tab">
+                    <% if (recentActivity && recentActivity.length > 0) { %>
+                        <div class="activity-timeline">
+                            <% recentActivity.forEach(activity => { %>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-<%= getActivityIcon(activity.activityType) %>"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-text">
+                                            <%= getActivityText(activity) %>
+                                        </div>
+                                        <div class="activity-time">
+                                            <%= formatTimeAgo(activity.createdAt) %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Chưa có hoạt động</h3>
+                            <p>Chưa có hoạt động gần đây.</p>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Tab Content: About -->
+                <div class="tab-content" id="about-tab">
+                    <div class="about-section">
+                        <h3>Thông tin cá nhân</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Tên</div>
+                                <div class="info-value"><%= profile.name %></div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Username</div>
+                                <div class="info-value">@<%= profile.username %></div>
+                            </div>
+                            <% if (profile.email && isOwnProfile) { %>
+                                <div class="info-item">
+                                    <div class="info-label">Email</div>
+                                    <div class="info-value"><%= profile.email %></div>
+                                </div>
+                            <% } %>
+                            <% if (profile.location) { %>
+                                <div class="info-item">
+                                    <div class="info-label">Địa điểm</div>
+                                    <div class="info-value"><%= profile.location %></div>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/profile.js"></script>
+</body>
+</html>
+
+<%
+function getActivityIcon(type) {
+    const icons = {
+        'view_post': 'eye',
+        'like_post': 'heart',
+        'comment': 'comment',
+        'create_post': 'plus-circle',
+        'follow': 'user-plus'
+    };
+    return icons[type] || 'circle';
+}
+
+function getActivityText(activity) {
+    // Implement activity text generation
+    return activity.activityType;
+}
+
+function formatTimeAgo(date) {
+    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    if (seconds < 60) return 'Vừa xong';
+    if (seconds < 3600) return Math.floor(seconds / 60) + ' phút trước';
+    if (seconds < 86400) return Math.floor(seconds / 3600) + ' giờ trước';
+    return Math.floor(seconds / 86400) + ' ngày trước';
+}
+%>

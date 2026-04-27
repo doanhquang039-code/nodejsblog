@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Blog Management</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-body">
+    <!-- Sidebar -->
+    <%- include('partials/dashboard-sidebar', { role: 'admin' }) %>
+
+    <!-- Main Content -->
+    <div class="dashboard-main">
+        <!-- Header -->
+        <%- include('partials/dashboard-header') %>
+
+        <!-- Content -->
+        <div class="dashboard-content">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h1>👑 Chào mừng, <%= user.name %>!</h1>
+                    <p>Quản trị viên hệ thống - Toàn quyền quản lý</p>
+                </div>
+                <div class="quick-actions">
+                    <button class="btn btn-primary" onclick="location.href='/admin/users/create'">
+                        <i class="fas fa-user-plus"></i>
+                        Thêm người dùng
+                    </button>
+                    <button class="btn btn-secondary" onclick="location.href='/admin/posts/create'">
+                        <i class="fas fa-plus"></i>
+                        Tạo bài viết
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card stat-primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-label">Tổng người dùng</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="userGrowth">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-success">
+                    <div class="stat-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalPosts">0</div>
+                        <div class="stat-label">Tổng bài viết</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="postGrowth">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-info">
+                    <div class="stat-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalComments">0</div>
+                        <div class="stat-label">Tổng bình luận</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="commentGrowth">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalViews">0</div>
+                        <div class="stat-label">Tổng lượt xem</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="viewGrowth">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <div class="card-header">
+                        <h3>
+                            <i class="fas fa-chart-line"></i>
+                            Tăng trưởng người dùng (7 ngày)
+                        </h3>
+                        <div class="card-actions">
+                            <button class="btn-icon" title="Refresh">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="userGrowthChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="card-header">
+                        <h3>
+                            <i class="fas fa-chart-bar"></i>
+                            Phân bố vai trò
+                        </h3>
+                        <div class="card-actions">
+                            <button class="btn-icon" title="Refresh">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="roleDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lists Row -->
+            <div class="lists-row">
+                <!-- Recent Activities -->
+                <div class="list-card">
+                    <div class="card-header">
+                        <h3>
+                            <i class="fas fa-history"></i>
+                            Hoạt động gần đây
+                        </h3>
+                        <a href="/admin/activities" class="btn-link">Xem tất cả</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-list" id="recentActivities">
+                            <!-- Activities will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Authors -->
+                <div class="list-card">
+                    <div class="card-header">
+                        <h3>
+                            <i class="fas fa-trophy"></i>
+                            Tác giả hàng đầu
+                        </h3>
+                        <a href="/admin/users?sort=posts" class="btn-link">Xem tất cả</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="author-list" id="topAuthors">
+                            <!-- Authors will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Posts -->
+            <div class="full-width-card">
+                <div class="card-header">
+                    <h3>
+                        <i class="fas fa-fire"></i>
+                        Bài viết phổ biến
+                    </h3>
+                    <a href="/admin/posts?sort=views" class="btn-link">Xem tất cả</a>
+                </div>
+                <div class="card-body">
+                    <div class="posts-table" id="popularPosts">
+                        <!-- Posts table will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/dashboard-admin.js"></script>
+</body>
+</html>

@@ -18,6 +18,9 @@ const relatedPostsRoutes = require("./src/routes/relatedPostsRoutes");
 const commentRatingRoutes = require("./src/routes/commentRatingRoutes");
 const activityRoutes = require("./src/routes/activityRoutes");
 const newsletterRoutes = require("./src/routes/newsletterRoutes");
+const chatbotRoutes = require("./src/routes/chatbotRoutes");
+const userProfileRoutes = require("./src/routes/userProfileRoutes");
+const dashboardRoutes = require("./src/routes/dashboardRoutes");
 
 require("./src/config/db");
 
@@ -52,6 +55,11 @@ app.use("/api/related-posts", relatedPostsRoutes);
 app.use("/api/comment-ratings", commentRatingRoutes);
 app.use("/api/activity", activityRoutes);
 app.use("/api/newsletter", newsletterRoutes);
+app.use("/api/chatbot", chatbotRoutes);
+app.use("/api/profile", userProfileRoutes);
+app.use("/profile", userProfileRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
