@@ -45,6 +45,7 @@ class SearchService {
     // Search with category
     include.push({
       model: Category,
+      as: "category",
       attributes: ["id", "name"],
       where: categoryId ? { id: categoryId } : undefined,
     });
@@ -53,6 +54,7 @@ class SearchService {
     if (tagId) {
       include.push({
         model: Tag,
+        as: "tags",
         attributes: ["id", "name"],
         through: { attributes: [] },
         where: { id: tagId },
@@ -60,6 +62,7 @@ class SearchService {
     } else {
       include.push({
         model: Tag,
+        as: "tags",
         attributes: ["id", "name"],
         through: { attributes: [] },
       });
@@ -136,9 +139,10 @@ class SearchService {
         ],
       },
       include: [
-        { model: Category, attributes: ["id", "name"] },
+        { model: Category, as: "category", attributes: ["id", "name"] },
         {
           model: Tag,
+          as: "tags",
           attributes: ["id", "name"],
           through: { attributes: [] },
         },
@@ -148,7 +152,7 @@ class SearchService {
     // Count by category
     const byCategory = {};
     posts.forEach((post) => {
-      const catName = post.Category?.name || "Other";
+      const catName = post.category?.name || "Other";
       byCategory[catName] = (byCategory[catName] || 0) + 1;
     });
 

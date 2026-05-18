@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics - My Blog</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <main class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="fw-bold mb-1">Analytics</h1>
+        <p class="text-muted mb-0">Tổng quan hiệu suất nội dung.</p>
+      </div>
+      <a href="/admin" class="btn btn-outline-secondary">Dashboard</a>
+    </div>
+
+    <div class="row g-3 mb-5">
+      <div class="col-md-3">
+        <div class="border rounded p-4 bg-light h-100">
+          <div class="text-muted">Bài đã duyệt</div>
+          <div class="display-6 fw-bold"><%= overview.totalPosts || 0 %></div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="border rounded p-4 bg-light h-100">
+          <div class="text-muted">Bình luận</div>
+          <div class="display-6 fw-bold"><%= overview.totalComments || 0 %></div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="border rounded p-4 bg-light h-100">
+          <div class="text-muted">Lượt xem</div>
+          <div class="display-6 fw-bold"><%= overview.totalViews || 0 %></div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="border rounded p-4 bg-light h-100">
+          <div class="text-muted">Lượt thích</div>
+          <div class="display-6 fw-bold"><%= overview.totalLikes || 0 %></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="row g-4">
+      <div class="col-lg-6">
+        <div class="border rounded p-4 h-100">
+          <h2 class="h5 mb-3">Hoạt động 6 tháng</h2>
+          <% const months = JSON.parse(monthlyData || '[]'); %>
+          <% if (months.length) { %>
+            <div class="list-group list-group-flush">
+              <% months.forEach(item => { %>
+                <div class="list-group-item d-flex justify-content-between px-0">
+                  <span><%= item.month %></span>
+                  <strong><%= item.posts %> bài / <%= item.comments %> bình luận</strong>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p class="text-muted mb-0">Chưa có dữ liệu.</p>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="border rounded p-4 h-100">
+          <h2 class="h5 mb-3">Theo danh mục</h2>
+          <% if (categoryStats && categoryStats.length) { %>
+            <div class="list-group list-group-flush">
+              <% categoryStats.forEach(item => { %>
+                <div class="list-group-item d-flex justify-content-between px-0">
+                  <span><%= item.categoryName || 'Chưa phân loại' %></span>
+                  <strong><%= item.postCount %> bài</strong>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p class="text-muted mb-0">Chưa có dữ liệu danh mục.</p>
+          <% } %>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -10,7 +10,9 @@ async function main() {
 
   try {
     const { port } = server.address();
-    const response = await fetch(`http://127.0.0.1:${port}/health`);
+    const baseUrl = `http://127.0.0.1:${port}`;
+
+    const response = await fetch(`${baseUrl}/health`);
     const body = await response.json();
 
     assert.equal(response.status, 200);
@@ -18,6 +20,27 @@ async function main() {
     assert.equal(body.service, "my-blog-node");
 
     console.log("Smoke test passed: GET /health");
+
+    const renderRoutes = [
+      "/notifications",
+      "/themes",
+      "/messaging",
+      "/achievements",
+      "/media-gallery",
+      "/search-advanced",
+      "/drafts",
+      "/settings",
+      "/modern-blog",
+      "/engagement-dashboard",
+      "/bookmarks",
+    ];
+
+    for (const route of renderRoutes) {
+      const page = await fetch(`${baseUrl}${route}`);
+      assert.equal(page.status, 200, `${route} should render`);
+    }
+
+    console.log(`Smoke test passed: rendered ${renderRoutes.length} public UI routes`);
   } finally {
     await new Promise((resolve) => server.close(resolve));
   }

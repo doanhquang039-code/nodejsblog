@@ -122,17 +122,18 @@ class AnalyticsService {
     const stats = await Post.findAll({
       where: { status: "approved" },
       attributes: [
-        [sequelize.col("Category.id"), "categoryId"],
-        [sequelize.col("Category.name"), "categoryName"],
+        [sequelize.col("category.id"), "categoryId"],
+        [sequelize.col("category.name"), "categoryName"],
         [sequelize.fn("COUNT", sequelize.col("Post.id")), "postCount"],
       ],
       include: [
         {
           model: require("../models").Category,
+          as: "category",
           attributes: [],
         },
       ],
-      group: ["Category.id", "Category.name"],
+      group: ["category.id", "category.name"],
       raw: true,
     });
 

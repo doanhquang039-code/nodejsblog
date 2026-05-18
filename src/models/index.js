@@ -22,6 +22,20 @@ const UserBadge = require("./UserBadge");
 const ChatSession = require("./ChatSession");
 const ChatMessage = require("./ChatMessage");
 const Chatbot = require("./chatbot");
+const Conversation = require("./Conversation");
+const ConversationParticipant = require("./ConversationParticipant");
+const Message = require("./Message");
+const MessageReaction = require("./MessageReaction");
+const Achievement = require("./Achievement");
+const UserAchievement = require("./UserAchievement");
+const UserPoint = require("./UserPoint");
+const PointTransaction = require("./PointTransaction");
+const RealtimeNotification = require("./RealtimeNotification");
+const NotificationPreference = require("./NotificationPreference");
+const ThemePreset = require("./ThemePreset");
+const UserTheme = require("./UserTheme");
+const sequelize = require("../config/db");
+const { Sequelize } = require("sequelize");
 
 // 1. QUAN HỆ USERS - POSTS (1-N)
 // Sếp dùng 'userId' vì trong Model Post mình đã map nó tới 'user_id'
@@ -111,7 +125,48 @@ ChatMessage.belongsTo(User, { foreignKey: "userId" });
 User.hasMany(Chatbot, { foreignKey: "userId", as: "chatbotMessages" });
 Chatbot.belongsTo(User, { foreignKey: "userId", as: "author" });
 
+// Private messaging relationships
+User.hasMany(Conversation, { foreignKey: "created_by", as: "createdConversations" });
+Conversation.belongsTo(User, { foreignKey: "created_by", as: "creator" });
+
+Conversation.hasMany(ConversationParticipant, { foreignKey: "conversation_id", as: "participants" });
+ConversationParticipant.belongsTo(Conversation, { foreignKey: "conversation_id", as: "conversation" });
+User.hasMany(ConversationParticipant, { foreignKey: "user_id", as: "conversationParticipants" });
+ConversationParticipant.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
+Conversation.hasMany(Message, { foreignKey: "conversation_id", as: "messages" });
+Conversation.belongsTo(Message, { foreignKey: "last_message_id", as: "lastMessage" });
+Message.belongsTo(Conversation, { foreignKey: "conversation_id", as: "conversation" });
+Message.belongsTo(User, { foreignKey: "sender_id", as: "sender" });
+User.hasMany(Message, { foreignKey: "sender_id", as: "sentMessages" });
+Message.belongsTo(Message, { foreignKey: "reply_to_id", as: "replyTo" });
+
+Message.hasMany(MessageReaction, { foreignKey: "message_id", as: "reactions" });
+MessageReaction.belongsTo(Message, { foreignKey: "message_id", as: "message" });
+MessageReaction.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
+// Achievement and leaderboard relationships
+Achievement.hasMany(UserAchievement, { foreignKey: "achievement_id", as: "userProgress" });
+UserAchievement.belongsTo(Achievement, { foreignKey: "achievement_id", as: "achievement" });
+User.hasMany(UserAchievement, { foreignKey: "user_id", as: "achievements" });
+UserAchievement.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
+User.hasOne(UserPoint, { foreignKey: "user_id", as: "points" });
+UserPoint.belongsTo(User, { foreignKey: "user_id", as: "user" });
+User.hasMany(PointTransaction, { foreignKey: "user_id", as: "pointTransactions" });
+PointTransaction.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
+// Notification and theme relationships
+User.hasMany(RealtimeNotification, { foreignKey: "user_id", as: "realtimeNotifications" });
+RealtimeNotification.belongsTo(User, { foreignKey: "user_id", as: "user" });
+User.hasOne(NotificationPreference, { foreignKey: "user_id", as: "notificationPreference" });
+NotificationPreference.belongsTo(User, { foreignKey: "user_id", as: "user" });
+User.hasOne(UserTheme, { foreignKey: "user_id", as: "theme" });
+UserTheme.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
 module.exports = {
+  sequelize,
+  Sequelize,
   User,
   Post,
   Category,
@@ -134,4 +189,16 @@ module.exports = {
   ChatSession,
   ChatMessage,
   Chatbot,
+  Conversation,
+  ConversationParticipant,
+  Message,
+  MessageReaction,
+  Achievement,
+  UserAchievement,
+  UserPoint,
+  PointTransaction,
+  RealtimeNotification,
+  NotificationPreference,
+  ThemePreset,
+  UserTheme,
 };

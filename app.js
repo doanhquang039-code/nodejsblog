@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 
 const commentRoutes = require("./src/routes/commentRoutes");
+const homeRoutes = require("./src/routes/homeRoutes");
 const authRoutes = require("./src/routes/authRoutes");
 const categoryRoutes = require("./src/routes/categoryRoutes");
 const userRoutes = require("./src/routes/userRoutes");
@@ -35,8 +36,8 @@ const enhancedChatbotRoutes = require("./src/routes/chatbotRouter");
 // Phase 2 Routes
 const notificationRoutes = require("./src/routes/notificationRoutes");
 const themeRoutes = require("./src/routes/themeRoutes");
-// const messagingRoutes = require("./src/routes/messagingRoutes");
-// const achievementRoutes = require("./src/routes/achievementRoutes");
+const messagingRoutes = require("./src/routes/messagingRoutes");
+const achievementRoutes = require("./src/routes/achievementRoutes");
 
 // WebSocket Setup
 const setupWebSocketServer = require("./src/utils/websocketServer");
@@ -56,6 +57,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/", homeRoutes);
 app.use("/", authRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -92,8 +94,8 @@ app.use("/api/chatbot/advanced", enhancedChatbotRoutes);
 // Phase 2 API Routes
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/themes", themeRoutes);
-// app.use("/api/conversations", messagingRoutes);
-// app.use("/api/achievements", achievementRoutes);
+app.use("/api/conversations", messagingRoutes);
+app.use("/api/achievements", achievementRoutes);
 
 // Phase 2 View Routes
 app.get("/notifications", (req, res) => {

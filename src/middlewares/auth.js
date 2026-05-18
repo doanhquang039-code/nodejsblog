@@ -5,7 +5,7 @@ const { User } = require('../models');
 const authenticateToken = async (req, res, next) => {
     try {
         const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1];
+        const token = (authHeader && authHeader.split(' ')[1]) || req.cookies?.token;
 
         if (!token) {
             return res.status(401).json({ error: 'Access token required' });
@@ -13,7 +13,7 @@ const authenticateToken = async (req, res, next) => {
 
         const secret = process.env.JWT_SECRET || "SECRET_KEY_CUA_SEP";
         const decoded = jwt.verify(token, secret);
-        const user = await User.findByPk(decoded.userId);
+        const user = await User.findByPk(decoded.userId || decoded.id);
 
         if (!user || user.status === "inactive" || user.isActive === false) {
             return res.status(401).json({ error: 'Invalid or inactive user' });

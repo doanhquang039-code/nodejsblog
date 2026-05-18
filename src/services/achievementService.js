@@ -253,7 +253,7 @@ class AchievementService {
                 {
                     model: db.User,
                     as: 'user',
-                    attributes: ['id', 'username', 'name', 'avatar']
+                    attributes: ['id', 'name', 'email', 'role']
                 }
             ],
             order: [[orderField, 'DESC']],
